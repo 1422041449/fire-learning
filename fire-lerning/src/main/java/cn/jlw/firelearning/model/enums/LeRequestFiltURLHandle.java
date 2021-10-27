@@ -21,6 +21,8 @@ public class LeRequestFiltURLHandle {
         List<String> skipUrlList = Lists.newArrayList();
         // 登出接口
         skipUrlList.add("/userinfo/logout");
+        skipUrlList.add("/test/upload");
+
 
         skipUrlArr = skipUrlList.toArray(new String[skipUrlList.size()]);
     }

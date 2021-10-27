@@ -42,8 +42,6 @@ public class LogAop {
             try {
                 decode = JSON.toJSONString(joinPoint.getArgs());
             } catch (Exception e) {
-                e.printStackTrace();
-                log.info(e.getMessage());
                 log.info("输入参数不能转换为json字符串!");
             }
         }

@@ -59,13 +59,5 @@ public class UserInfoController {
         return LeResponse.succ();
     }
 
-    /**
-     * 验证token测试
-     */
-    @PostMapping("/test/token")
-    public LeResponse<?> testToken() {
-        log.info("测试携带token登录");
-        return LeResponse.succ();
-    }
 
 }

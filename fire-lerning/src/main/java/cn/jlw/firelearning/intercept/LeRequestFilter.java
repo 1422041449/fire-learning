@@ -26,13 +26,15 @@ public class LeRequestFilter implements Filter {
         log.info("请求入参过滤");
         //获取请求信息
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        MyRequestWrapper req = new MyRequestWrapper(httpServletRequest);
-        String path = req.getRequestURI();
+        String path = httpServletRequest.getRequestURI();
         // 对于某些请求地址可以，无需验证路径，则直接向下执行
         if (LeRequestFiltURLHandle.skipAuth(path)) {
-            chain.doFilter(req, response);
+            chain.doFilter(httpServletRequest, response);
             return;
         }
+
+        //转换请求，获取post和get入参
+        MyRequestWrapper req = new MyRequestWrapper(httpServletRequest);
         String method = req.getMethod();
         if ("GET".equals(method)) {
             // 获取所有参数
