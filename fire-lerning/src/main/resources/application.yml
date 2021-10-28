@@ -4,6 +4,11 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/fire_learning?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: root
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    connect-timeout: 10000
+
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
 

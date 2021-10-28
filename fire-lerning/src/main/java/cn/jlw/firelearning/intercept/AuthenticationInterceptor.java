@@ -39,8 +39,18 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+        //检查类上是否有passToken注解，有则跳过
+        //获取方法的类
+        Class<?> beanType = handlerMethod.getBeanType();
+        if (beanType.isAnnotationPresent(PassToken.class)) {
+            PassToken passToken = beanType.getAnnotation(PassToken.class);
+            if (passToken.required()) {
+                return true;
+            }
+        }
+        //获取方法
         Method method = handlerMethod.getMethod();
-        //检查是否有passToken注解,有则跳过
+        //检查方法是否有passToken注解,有则跳过
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passToken = method.getAnnotation(PassToken.class);
             if (passToken.required()) {
