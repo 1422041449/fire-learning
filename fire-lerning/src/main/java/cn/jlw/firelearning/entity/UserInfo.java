@@ -1,13 +1,14 @@
 package cn.jlw.firelearning.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author jlw
- * @since 2021-10-23
+ * @since 2021-10-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -45,6 +46,30 @@ public class UserInfo implements Serializable {
      */
     @TableField("role")
     private String role;
+
+    /**
+     * 昵称
+     */
+    @TableField("name")
+    private String name;
+
+    /**
+     * 手机号
+     */
+    @TableField("phone")
+    private String phone;
+
+    /**
+     * 真实姓名
+     */
+    @TableField("real_name")
+    private String realName;
+
+    /**
+     * 头像
+     */
+    @TableField("avatar")
+    private String avatar;
 
 
 }

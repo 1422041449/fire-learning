@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
+
+Vue.use(Router)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -30,16 +29,14 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
+
+/**
+ * 公共路由
+ */
+export const constantRouterMap = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    hidden: true
-  },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
     hidden: true
   },
 
@@ -53,6 +50,12 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
+  },
+
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   },
 
   {
@@ -78,25 +81,12 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
-      title: 'Nested',
+      title: '多菜单',
       icon: 'nested'
     },
     children: [
@@ -158,24 +148,58 @@ export const constantRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
+  }
+]
+
+/**
+ * 异步动态路由，根据权限来
+ */
+export const asyncRouterMap = [
+
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: '表单',
+        component: () => import('@/views/form/index'),
+        meta: { title: 'Form', icon: 'form', role: ['user'] }
+      }
+    ]
+  },
+
+  {
+    path: '/consult',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Consult',
+        component: () => import('@/views/consult/index'),
+        meta: { title: '咨询', icon: 'table', role: ['admin'] }
+      }
+    ]
   },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+// export default new Router({
+//   routes: constantRouterMap
+// })
+
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRouterMap
 })
 
-const router = createRouter()
-
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
 
+const router = createRouter()
 export default router

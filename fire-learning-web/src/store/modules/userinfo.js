@@ -1,12 +1,13 @@
 import { getInfo, login, logout } from '@/api/userinfo'
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+// import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    role:'',
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
   }
 }
 
@@ -50,9 +54,10 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
         console.log(res)
-        const { name, avatar } = data
+        const { name, avatar, role } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_ROLE', role)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -65,7 +70,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
-        resetRouter()
+        // resetRouter()
         commit('RESET_STATE')
         resolve()
       }).catch(error => {

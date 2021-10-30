@@ -26,16 +26,25 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
+      //通过角色标志来判断用户是否登录过，只有登录过才有角色
+      const hasGetUserInfo = store.getters.role
       if (hasGetUserInfo) {
         next()
       } else {
         try {
-          // get user info
-          await store.dispatch('userinfo/getInfo')
-          next()
+          //获取用户信息
+          let res = await store.dispatch('userinfo/getInfo')
+          console.log('登录时的用户信息', res)
+          const role = [res.role]
+          await store.dispatch('generateRoutes', role)
+          console.log('getter存储的值:', store)
+          //路由表立刻生效
+          router.options.routes = store.getters.routers
+          router.addRoutes(store.getters.routers) // 动态添加可访问路由表
+          next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
         } catch (error) {
           // remove token and go to login page to re-login
+          console.log('路由跳转前错误日志', error)
           await store.dispatch('userinfo/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)

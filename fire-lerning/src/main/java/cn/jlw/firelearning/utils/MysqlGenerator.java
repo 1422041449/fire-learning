@@ -59,7 +59,8 @@ public class MysqlGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
 //        pc.setModuleName(scanner("模块名"));
-        pc.setParent("cn.jlw.firelearning");
+        pc.setModuleName("generate");
+//        pc.setParent("cn.jlw.firelearning");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
