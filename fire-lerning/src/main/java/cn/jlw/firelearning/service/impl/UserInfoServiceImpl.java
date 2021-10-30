@@ -1,11 +1,13 @@
 package cn.jlw.firelearning.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import cn.jlw.firelearning.entity.UserInfo;
 import cn.jlw.firelearning.exception.LeException;
 import cn.jlw.firelearning.mapper.UserInfoMapper;
 import cn.jlw.firelearning.model.LeResponse;
+import cn.jlw.firelearning.model.dto.UserInfoAddDTO;
 import cn.jlw.firelearning.model.dto.UserInfoLoginDTO;
 import cn.jlw.firelearning.service.TokenService;
 import cn.jlw.firelearning.service.UserInfoService;
@@ -57,5 +59,29 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             return LeResponse.fail("用户不存在!");
         }
         return LeResponse.succ(userInfo);
+    }
+
+    @Override
+    public LeResponse<?> registerUser(UserInfoAddDTO content) {
+        //检验该手机号是否已存在
+        UserInfo checkUser = baseMapper.selectOne(Wrappers.lambdaQuery(UserInfo.class)
+                .eq(UserInfo::getPhone, content.getPhone())
+                .select(UserInfo::getPhone));
+        if (ObjectUtil.isNotEmpty(checkUser)) {
+            return LeResponse.fail("该手机号已被注册!");
+        }
+        //校验昵称
+        UserInfo checkUser2 = baseMapper.selectOne(Wrappers.lambdaQuery(UserInfo.class)
+                .eq(UserInfo::getPhone, content.getName())
+                .select(UserInfo::getName));
+        if (ObjectUtil.isNotEmpty(checkUser2)) {
+            return LeResponse.fail("该昵称已存在!");
+        }
+        UserInfo userInfo = new UserInfo();
+        BeanUtil.copyProperties(content, userInfo);
+        userInfo.setUsername(content.getPhone());
+        userInfo.setRole("user");
+        baseMapper.insert(userInfo);
+        return LeResponse.succ();
     }
 }

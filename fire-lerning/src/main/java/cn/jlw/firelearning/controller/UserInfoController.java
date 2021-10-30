@@ -4,6 +4,7 @@ package cn.jlw.firelearning.controller;
 import cn.jlw.firelearning.entity.UserInfo;
 import cn.jlw.firelearning.model.LeRequest;
 import cn.jlw.firelearning.model.LeResponse;
+import cn.jlw.firelearning.model.dto.UserInfoAddDTO;
 import cn.jlw.firelearning.model.dto.UserInfoLoginDTO;
 import cn.jlw.firelearning.model.interfaces.PassToken;
 import cn.jlw.firelearning.service.UserInfoService;
@@ -59,5 +60,14 @@ public class UserInfoController {
         return LeResponse.succ();
     }
 
+    /**
+     * 注册用户
+     */
+    @PassToken
+    @PostMapping("/register")
+    public LeResponse<?> registerUser(@Valid @RequestBody LeRequest<UserInfoAddDTO> leRequest){
+        UserInfoAddDTO content = leRequest.getContent();
+        return userInfoService.registerUser(content);
+    }
 
 }

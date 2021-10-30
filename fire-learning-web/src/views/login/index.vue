@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
+    <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on"
              label-position="left">
 
       <div class="title-container">
@@ -14,7 +14,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="手机号"
           name="username"
           type="text"
           tabindex="1"
@@ -31,7 +31,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -45,8 +45,40 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">登录
       </el-button>
+
+      <el-button :loading="loading" type="info" style="width:100%;margin-bottom:30px;"
+                 @click.native.prevent="add()">注册
+      </el-button>
     </el-form>
+
+    <el-dialog :title="editdialog.title" :visible.sync="editdialog.dialogFormVisible" :show-close="true"
+               :close-on-click-modal="false" width="800px" id="dialog-input">
+      <el-form :model="editdialog.date" label-width="120px" ref="form">
+        <el-form-item label="手机号" :label-width="formLabelWidth">
+          <el-input v-model="editdialog.date.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input v-model="editdialog.date.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" :label-width="formLabelWidth">
+          <el-input v-model="editdialog.date.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="真实姓名" :label-width="formLabelWidth">
+          <el-input v-model="editdialog.date.realName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="头像" :label-width="formLabelWidth">
+          <el-input v-model="editdialog.date.avatar" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editdialog.dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="register">注 册</el-button>
+        <!--      <el-button type="primary" @click="editdialog.dialogStatus === 'create' ? create() : update()">确 定</el-button>-->
+      </div>
+    </el-dialog>
   </div>
+
+
 </template>
 
 <script>
@@ -55,32 +87,43 @@ import { validUsername } from '@/utils/validate'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (!validUsername(value)) {
+    //     callback(new Error('Please enter the correct user name'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePassword = (rule, value, callback) => {
+    //   if (value.length < 6) {
+    //     callback(new Error('The password can not be less than 6 digits'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
+      userinfo: {
+        phone: '',
+        password: ''
+      },
+      editdialog: {
+        dialogFormVisible: false,
+        dialogStatus: '',
+        title: '详细信息',
+        date: {}
+      },
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
+      // loginRules: {
+      //   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+      //   password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      // },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      formLabelWidth: '120px'
     }
   },
   watch: {
@@ -102,15 +145,6 @@ export default {
         this.$refs.password.focus()
       })
     },
-    // async handleLogin() {
-    //   this.loading = true
-    //   let res = await this.$store.dispatch('userinfo/login', this.loginForm)
-    //   alert(JSON.stringify(res))
-    //   if (res.code == 10000) {
-    //     this.$router.push({ path: '/home' })
-    //   }
-    //   this.loading = false
-    // }
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -126,6 +160,31 @@ export default {
           return false
         }
       })
+    },
+    //开启模态框
+    add(row, state) {
+      this.editdialog.dialogFormVisible = true
+      this.editdialog.date = Object.assign({}, row)
+      this.editdialog.dialogStatus = state
+    },
+    async register() {
+      this.$refs['form'].validate(async(valid) => {
+        console.log(valid)
+        let obj = this.editdialog.date
+        console.log("请求入参:",obj)
+        if (valid) {
+          await this.$store.dispatch(`userinfo/register`, obj)
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          })
+          this.getData()
+          this.activeName = ''
+          this.editdialog.dialogFormVisible = false
+        } else {
+          return
+        }
+      })
     }
   }
 }
@@ -138,6 +197,7 @@ export default {
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
+
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -174,6 +234,10 @@ $cursor: #fff;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+  }
+
+  .el-button {
+    margin-left: 0px;
   }
 }
 </style>
@@ -238,6 +302,44 @@ $light_gray: #eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+}
+
+</style>
+
+<style lang="scss">
+#dialog-input {
+  div.el-form-item {
+    background-color: white;
+  }
+
+  div.el-input {
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+  }
+
+  input.el-input__inner {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    //border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 45px;
+    line-height: 40px;
+    outline: none;
+    padding: 0 15px;
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    width: 100%;
+    caret-color: black;
+  }
+
+  button {
+    margin-left: 30px;
+    margin-right: 20px;
   }
 }
 </style>

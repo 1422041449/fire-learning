@@ -44,3 +44,15 @@ export function logout(data) {
     params: obj
   })
 }
+
+export function register(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/userinfo/register',
+    method: 'post',
+    data: obj
+  })
+}

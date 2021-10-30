@@ -2,6 +2,7 @@ package cn.jlw.firelearning.service;
 
 import cn.jlw.firelearning.entity.UserInfo;
 import cn.jlw.firelearning.model.LeResponse;
+import cn.jlw.firelearning.model.dto.UserInfoAddDTO;
 import cn.jlw.firelearning.model.dto.UserInfoLoginDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -26,4 +27,9 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     LeResponse<UserInfo> getUserInfo(String token);
+
+    /**
+     * 注册用户
+     */
+    LeResponse<?> registerUser(UserInfoAddDTO content);
 }

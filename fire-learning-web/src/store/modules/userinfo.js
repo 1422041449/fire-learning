@@ -1,4 +1,4 @@
-import { getInfo, login, logout } from '@/api/userinfo'
+import { getInfo, login, logout, register } from '@/api/userinfo'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    role:'',
+    role: ''
   }
 }
 
@@ -86,7 +86,18 @@ const actions = {
       commit('RESET_STATE')
       resolve()
     })
+  },
+
+  register({},data) {
+    return new Promise((resolve, reject) => {
+      register(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
+
 }
 
 export default {
