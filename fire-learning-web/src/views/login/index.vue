@@ -67,7 +67,16 @@
           <el-input v-model="editdialog.date.realName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="头像" :label-width="formLabelWidth">
-          <el-input v-model="editdialog.date.avatar" autocomplete="off"></el-input>
+          <el-upload
+            action="upload"
+            class="avatar-uploader"
+            accept=".png, .jpg, .jpeg"
+            :show-file-list="false"
+            :before-upload="beforeAvatarUpload"
+            :http-request="uploadAvatar">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,7 +91,6 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
@@ -102,10 +110,7 @@ export default {
     //   }
     // }
     return {
-      userinfo: {
-        phone: '',
-        password: ''
-      },
+      imageUrl: '',
       editdialog: {
         dialogFormVisible: false,
         dialogStatus: '',
@@ -167,24 +172,71 @@ export default {
       this.editdialog.date = Object.assign({}, row)
       this.editdialog.dialogStatus = state
     },
+    //注册
     async register() {
       this.$refs['form'].validate(async(valid) => {
         console.log(valid)
         let obj = this.editdialog.date
-        console.log("请求入参:",obj)
+        obj.avatar = this.imageUrl
+        console.log('请求入参:', obj)
         if (valid) {
           await this.$store.dispatch(`userinfo/register`, obj)
           this.$message({
             type: 'success',
             message: '添加成功!'
           })
-          this.getData()
-          this.activeName = ''
           this.editdialog.dialogFormVisible = false
         } else {
           return
         }
       })
+    },
+    //上传头像
+    async uploadAvatar(param) {
+      const file = param.file
+      //通过表单提交，创建formData
+      let formData = new FormData()
+      formData.append('file', file)
+      formData.append('uploadFlag', 1)
+      formData.append('content', 'avatar')
+      let res = await this.$store.dispatch('upload/upload', formData)
+      console.log('通过调取接口拿到的头像地址返回：', res)
+      if (res.code == 10000) {
+        //赋值返回的图片地址
+        this.imageUrl = res.data
+        this.$message({
+          type: 'success',
+          message: '上传成功!'
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败!'
+        })
+      }
+    },
+    // async handleAvatarSuccess(res, file) {
+    //   console.log('通过钩子拿到的头像地址返回：', res)
+    //   if (res.code == 10000) {
+    //     //赋值返回的图片地址
+    //     this.imageUrl = response.data
+    //     this.$message({
+    //       type: 'success',
+    //       message: '上传成功!'
+    //     })
+    //   } else {
+    //     this.$message({
+    //       type: 'error',
+    //       message: '上传失败!'
+    //     })
+    //   }
+    // },
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isLt2M
     }
   }
 }
@@ -307,6 +359,7 @@ $light_gray: #eee;
 
 </style>
 
+<!--注册弹框-->
 <style lang="scss">
 #dialog-input {
   div.el-form-item {
@@ -341,5 +394,35 @@ $light_gray: #eee;
     margin-left: 30px;
     margin-right: 20px;
   }
+}
+</style>
+
+<!--上传照片-->
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

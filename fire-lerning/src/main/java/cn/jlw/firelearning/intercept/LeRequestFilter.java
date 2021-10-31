@@ -32,6 +32,11 @@ public class LeRequestFilter implements Filter {
             chain.doFilter(httpServletRequest, response);
             return;
         }
+        //地址中以/file开头的，直接过滤
+        if (path.startsWith("/file")) {
+            chain.doFilter(httpServletRequest, response);
+            return;
+        }
 
         //转换请求，获取post和get入参
         MyRequestWrapper req = new MyRequestWrapper(httpServletRequest);
