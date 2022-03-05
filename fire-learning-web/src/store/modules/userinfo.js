@@ -1,4 +1,4 @@
-import { getInfo, login, logout, register } from '@/api/userinfo'
+import { getInfo, login, logout, register, listUserInfo, deleteUserInfo ,updateUserInfo} from '@/api/userinfo'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
@@ -96,6 +96,36 @@ const actions = {
   register({}, data) {
     return new Promise((resolve, reject) => {
       register(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  listUserInfo({}, data) {
+    return new Promise((resolve, reject) => {
+      listUserInfo(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  deleteUserInfo({}, data) {
+    return new Promise((resolve, reject) => {
+      deleteUserInfo(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  updateUserInfo({}, data) {
+    return new Promise((resolve, reject) => {
+      updateUserInfo(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)

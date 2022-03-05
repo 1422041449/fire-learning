@@ -56,3 +56,39 @@ export function register(data) {
     data: obj
   })
 }
+
+export function listUserInfo(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/userinfo/list/userinfo',
+    method: 'post',
+    data: obj
+  })
+}
+
+export function deleteUserInfo(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/userinfo/delete/userinfo',
+    method: 'post',
+    data: obj
+  })
+}
+
+export function updateUserInfo(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/userinfo/update/userinfo',
+    method: 'post',
+    data: obj
+  })
+}

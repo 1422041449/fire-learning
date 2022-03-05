@@ -2,21 +2,26 @@ package cn.jlw.firelearning.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.jlw.firelearning.entity.UserInfo;
 import cn.jlw.firelearning.exception.LeException;
 import cn.jlw.firelearning.mapper.UserInfoMapper;
 import cn.jlw.firelearning.model.LeResponse;
 import cn.jlw.firelearning.model.dto.UserInfoAddDTO;
+import cn.jlw.firelearning.model.dto.UserInfoListDTO;
 import cn.jlw.firelearning.model.dto.UserInfoLoginDTO;
 import cn.jlw.firelearning.service.TokenService;
 import cn.jlw.firelearning.service.UserInfoService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -83,5 +88,34 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setRole("user");
         baseMapper.insert(userInfo);
         return LeResponse.succ();
+    }
+
+    @Override
+    public List<UserInfo> listUserInfo(UserInfoListDTO content) {
+        //查询所有用户
+        LambdaQueryWrapper<UserInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(UserInfo::getRole, "user");
+        if (StrUtil.isNotBlank(content.getName())) {
+            lambdaQueryWrapper.like(UserInfo::getName, content.getName());
+        }
+        if (StrUtil.isNotBlank(content.getRealName())) {
+            lambdaQueryWrapper.like(UserInfo::getRealName, content.getRealName());
+        }
+        if (StrUtil.isNotBlank(content.getPhone())) {
+            lambdaQueryWrapper.eq(UserInfo::getPhone, content.getPhone());
+        }
+        return baseMapper.selectList(lambdaQueryWrapper);
+    }
+
+    @Override
+    public void deleteUserInfo(String username) {
+        baseMapper.delete(Wrappers.lambdaQuery(UserInfo.class)
+                .eq(UserInfo::getUsername, username));
+    }
+
+    @Override
+    public void updateUserInfo(UserInfo content) {
+        baseMapper.update(content, Wrappers.lambdaUpdate(UserInfo.class)
+                .eq(UserInfo::getUsername, content.getUsername()));
     }
 }
