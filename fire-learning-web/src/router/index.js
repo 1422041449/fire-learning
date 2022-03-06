@@ -196,14 +196,14 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/consultMgr',
+    path: '/exercises',
     component: Layout,
     children: [
       {
-        path: 'consultMgr',
-        name: 'ConsultMgr',
-        component: () => import('@/views/admin/consultMgr/index'),
-        meta: { title: '咨询管理', icon: 'form', role: ['admin'] }
+        path: 'exercises',
+        name: '题目管理',
+        component: () => import('@/views/admin/exercises/index'),
+        meta: { title: '题目管理', icon: 'form', role: ['admin'] }
       }
     ]
   },
