@@ -201,9 +201,9 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'exercises',
-        name: '题目管理',
-        component: () => import('@/views/admin/exercises/index'),
-        meta: { title: '题目管理', icon: 'form', role: ['admin'] }
+        name: '题库管理',
+        component: () => import('@/views/admin/exercises/ExerciseBank'),
+        meta: { title: '题库管理', icon: 'form', role: ['admin'] }
       }
     ]
   },

@@ -1,31 +1,33 @@
 package cn.jlw.firelearning.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
- * 用户表
+ * 用户阶段信息表
  * </p>
  *
  * @author jlw
- * @since 2021-10-30
+ * @since 2022-03-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("user_info")
-public class UserInfo implements Serializable {
+public class UserStageInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -34,34 +36,24 @@ public class UserInfo implements Serializable {
     private String username;
 
     /**
-     * 密码
+     * 阶段号
      */
-    private String password;
+    private Integer stageNum;
 
     /**
-     * 角色
+     * 学习状态(1已完成2未完成)
      */
-    private String role;
+    private Integer learnState;
 
     /**
-     * 昵称
+     * 考试成绩
      */
-    private String name;
+    private BigDecimal testScore;
 
     /**
-     * 手机号
+     * 成绩等级
      */
-    private String phone;
-
-    /**
-     * 真实姓名
-     */
-    private String realName;
-
-    /**
-     * 头像
-     */
-    private String avatar;
+    private String scoreLevel;
 
 
 }

@@ -29,7 +29,6 @@
         <el-button
           v-waves
           type="success"
-          @click=""
           style="margin-left: 10px"
           @click="() => getData()"
         >搜索
