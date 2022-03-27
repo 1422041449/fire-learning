@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://122.112.219.86:58099/fire_learning?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/fire_learning?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: root
   redis:
@@ -17,3 +17,15 @@ minio:
   accessKey: minioadmin
   secretKey: minioadmin
   bucketName: fire
+
+
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://122.112.219.86:58099/fire_learning?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    connect-timeout: 10000

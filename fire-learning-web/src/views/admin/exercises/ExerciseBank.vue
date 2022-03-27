@@ -3,35 +3,34 @@
     <el-header>
       <div class="filter-container">
         <el-input
-          v-model="listQuery.name"
+          v-model="listQuery.exercisesTitle"
           clearable
-          placeholder="输入昵称"
+          placeholder="输入题目"
           style="width: 160px;margin-right: 10px"
           class="filter-item"
           @keyup.enter.native="() =>  getData()"
         />
-        <el-input
-          v-model="listQuery.realName"
-          clearable
-          placeholder="输入姓名"
-          style="width: 160px;margin-right: 10px"
-          class="filter-item"
-          @keyup.enter.native="() =>  getData()"
-        />
-        <el-input
-          v-model="listQuery.phone"
-          clearable
-          placeholder="输入手机号"
-          style="width: 160px;margin-right: 10px"
-          class="filter-item"
-          @keyup.enter.native="() =>  getData()"
-        />
+        <el-select v-model="listQuery.exercisesType" placeholder="题目类型" clearable>
+          <el-option
+            v-for="item in exercisesTypeEnum"
+            :key="item.id"
+            :label="item.content"
+            :value="item.id">
+          </el-option>
+        </el-select>
         <el-button
           v-waves
           type="success"
           style="margin-left: 10px"
           @click="() => getData()"
         >搜索
+        </el-button>
+        <el-button
+          v-waves
+          type="primary"
+          style="margin-left: 10px"
+          @click="add(null, 'create')"
+        >新增
         </el-button>
       </div>
     </el-header>
@@ -54,42 +53,38 @@
         </el-table-column>
 
         <el-table-column
-          label="用户名"
+          label="题目编号"
           align="center">
           <template slot-scope="{ row }">
-            <span>{{ row.username }}</span>
+            <span>{{ row.exercisesNum }}</span>
           </template>
         </el-table-column>
 
         <el-table-column
-          label="密码"
+          label="题目"
           align="center">
           <template slot-scope="{ row }">
-            <span>{{ row.password }}</span>
+            <span>{{ row.exercisesTitle }}</span>
           </template>
         </el-table-column>
 
         <el-table-column
-          label="昵称"
+          label="题目类型"
           align="center">
           <template slot-scope="{ row }">
-            <span>{{ row.name }}</span>
+            <span v-for="item in exercisesTypeEnum">{{ row.exercisesType == item.id ? item.content:'' }}</span>
           </template>
         </el-table-column>
 
         <el-table-column
-          label="手机号"
+          label="答案"
           align="center">
           <template slot-scope="{ row }">
-            <span>{{ row.phone }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column
-          label="真实姓名"
-          align="center">
-          <template slot-scope="{ row }">
-            <span>{{ row.realName }}</span>
+            <span v-for="option in row.optionsList">
+              <span v-if="option.ifRight == 1"
+                    style="color: red">{{ option.optionNum}}:{{option.optionContent}}<br> </span>
+              <span v-if="option.ifRight == 2">{{ option.optionNum}}:{{option.optionContent}}<br> </span>
+            </span>
           </template>
         </el-table-column>
 
@@ -126,20 +121,34 @@
         :model="editdialog.date"
         label-width="100px"
       >
-        <el-form-item label="用户名">
-          <el-input v-model="editdialog.date.username" disabled/>
+        <el-form-item label="题目编号">
+          <el-input v-model="editdialog.date.exercisesNum" disabled placeholder="新增自动生成"/>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="editdialog.date.password"/>
+        <el-form-item label="题目">
+          <el-input v-model="editdialog.date.exercisesTitle"/>
         </el-form-item>
-        <el-form-item label="昵称">
-          <el-input v-model="editdialog.date.name"/>
+        <el-form-item label="题目类型">
+          <template>
+            <el-radio v-model="editdialog.date.exercisesType" label="1">单选</el-radio>
+            <el-radio v-model="editdialog.date.exercisesType" label="2">多选</el-radio>
+          </template>
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model="editdialog.date.phone"/>
+        <el-form-item label="选项A">
+          <el-input v-model="editdialog.date.anasA"/>
         </el-form-item>
-        <el-form-item label="真实姓名">
-          <el-input v-model="editdialog.date.realName"/>
+        <el-form-item label="选项B">
+          <el-input v-model="editdialog.date.anasB"/>
+        </el-form-item>
+        <el-form-item label="选项C">
+          <el-input v-model="editdialog.date.anasC"/>
+        </el-form-item>
+        <el-form-item label="正确答案">
+          <template>
+            <el-checkbox-group
+              v-model="rightList">
+              <el-checkbox v-for="option in options" :label="option" :key="option">{{option}}</el-checkbox>
+            </el-checkbox-group>
+          </template>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -156,108 +165,260 @@
 </template>
 
 <script>
-export default {
-  /*初始化执行方法*/
-  async created() {
-    this.getData()
-  },
-
-  /*方法*/
-  methods: {
-    //获取用户信息
-    async getData() {
-      let object = {}
-      let keys = Object.keys(this.listQuery)
-      keys.forEach(v => {
-        if (this.listQuery[v]) {
-          object[v] = this.listQuery[v]
-        }
-      })
-      let res = await this.$store.dispatch(
-        'userinfo/listUserInfo',
-        object
-      )
-      console.log(JSON.stringify(res))
-      this.tableData = res.data
-    },
-
-    //新增修改控制模态框开启
-    async add(row, state) {
-      if (this.$refs.form) {
-        this.$refs.form.resetFields()
-      }
-
-      let obj = Object.assign({}, row)
-      this.editdialog.dialogFormVisible = true
-      this.editdialog.date = obj
-      this.editdialog.dialogStatus = state
-    },
-
-    //删除
-    async del(row, index) {
-      console.log(this)
-      await this.$confirm('是否确认删除?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-      console.log(row)
-      let res = await this.$store.dispatch(
-        `userinfo/deleteUserInfo`,
-        row.username
-      )
-      this.tableData.splice(index, 1)
-      this.$message({
-        type: 'success',
-        message: '删除成功!'
-      })
+  const allOptions = ['A', 'B', 'C']
+  export default {
+    /*初始化执行方法*/
+    async created() {
       this.getData()
     },
 
-    // 更新
-    update() {
-      this.$refs["form"].validate(async (valid) => {
-        if (valid) {
-          console.log(this.editdialog.date);
-          await this.$store.dispatch(
-            `userinfo/updateUserInfo`,
-            this.editdialog.date
-          );
-          this.$message({
-            type: "success",
-            message: "编辑成功!",
-          });
-          this.editdialog.dialogFormVisible = false;
-          this.getData();
-        } else {
-          return;
+    /*方法*/
+    methods: {
+      //获取用户信息
+      async getData() {
+        let object = {}
+        let keys = Object.keys(this.listQuery)
+        keys.forEach(v => {
+          if (this.listQuery[v]) {
+            object[v] = this.listQuery[v]
+          }
+        })
+        let res = await this.$store.dispatch(
+          'exercise/listExercisesInfo',
+          object
+        )
+        console.log('查询返回内容--:' + JSON.stringify(res))
+        //处理数据.
+        this.tableData = res.data
+      },
+
+      //新增修改控制模态框开启
+      async add(row, state) {
+        console.log('编辑行数据--：{}', row)
+        if (this.$refs.form) {
+          this.$refs.form.resetFields()
         }
-      });
+        let obj = Object.assign({}, row)
+        let rightList = []
+        for (let i in obj.optionsList) {
+          let option = obj.optionsList[i]
+          if (option.optionNum == 'A') {
+            obj.anasA = option.optionContent
+            if (option.ifRight == 1) {
+              rightList.push(option.optionNum)
+            }
+          } else if (option.optionNum == 'B') {
+            obj.anasB = option.optionContent
+            if (option.ifRight == 1) {
+              rightList.push(option.optionNum)
+            }
+          } else if (option.optionNum == 'C') {
+            obj.anasC = option.optionContent
+            if (option.ifRight == 1) {
+              rightList.push(option.optionNum)
+            }
+          }
+        }
+        this.rightList = rightList
+        console.log('编辑组装后数据---：{}', obj)
+
+        this.editdialog.date = obj
+        this.editdialog.dialogStatus = state
+        this.editdialog.dialogFormVisible = true
+
+      },
+
+      //删除
+      async del(row, index) {
+        console.log(this)
+        await this.$confirm('是否确认删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        console.log(row)
+        let res = await this.$store.dispatch(
+          `exercise/deleteExercisesInfo`,
+          row.exercisesNum
+        )
+        this.tableData.splice(index, 1)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.getData()
+      },
+
+      // 更新
+      update() {
+        this.$refs['form'].validate(async(valid) => {
+          if (valid) {
+            console.log('调用修改接口入参--：{}', this.editdialog.date)
+            let object = this.editdialog.date
+            for (let i in object.optionsList) {
+              let option = object.optionsList[i]
+              if (option.optionNum == 'A') {
+                option.optionContent = this.editdialog.date.anasA
+                if (this.contains(this.rightList, 'A')) {
+                  option.ifRight = 1
+                } else {
+                  option.ifRight = 2
+                }
+              } else if (option.optionNum == 'B') {
+                option.optionContent = this.editdialog.date.anasB
+                if (this.contains(this.rightList, 'B')) {
+                  option.ifRight = 1
+                } else {
+                  option.ifRight = 2
+                }
+              } else if (option.optionNum == 'C') {
+                option.optionContent = this.editdialog.date.anasC
+                if (this.contains(this.rightList, 'C')) {
+                  option.ifRight = 1
+                } else {
+                  option.ifRight = 2
+                }
+              }
+            }
+            if (this.rightList.length == 0) {
+              this.errorMsg('正确答案不能为空!')
+              return
+            }
+            //校验单选选修
+            if (object.exercisesType == '1' && this.rightList.length > 1) {
+              this.errorMsg('单选只可选择一个答案!')
+              return
+            }
+            console.log('调用修改接口入参--：{}', object)
+            await this.$store.dispatch(
+              `exercise/editExercisesInfo`,
+              object
+            )
+            this.$message({
+              type: 'success',
+              message: '编辑成功!'
+            })
+            this.editdialog.dialogFormVisible = false
+            this.getData()
+          } else {
+            return
+          }
+        })
+      },
+      //新增
+      create() {
+        this.$refs['form'].validate(async(valid) => {
+          if (valid) {
+            console.log('编辑框内容：' + JSON.stringify(this.editdialog.date))
+            console.log('编辑框内容：' + this.rightList)
+            let object = {}
+            object.exercisesTitle = this.editdialog.date.exercisesTitle
+            object.exercisesType = this.editdialog.date.exercisesType
+            let optionsList = []
+            let anasA = {}
+            anasA.optionNum = 'A'
+            anasA.optionContent = this.editdialog.date.anasA
+            let anasB = {}
+            anasB.optionNum = 'B'
+            anasB.optionContent = this.editdialog.date.anasB
+            let anasC = {}
+            anasC.optionNum = 'C'
+            anasC.optionContent = this.editdialog.date.anasC
+            for (let i in this.rightList) {
+              let value = this.rightList[i]
+              if (value === 'A') {
+                anasA.ifRight = 1
+              } else if (value === 'B') {
+                anasB.ifRight = 1
+              } else if (value === 'C') {
+                anasC.ifRight = 1
+              }
+            }
+            optionsList.push(anasA)
+            optionsList.push(anasB)
+            optionsList.push(anasC)
+            object.optionsList = optionsList
+
+            if (this.rightList.length == 0) {
+              this.errorMsg('正确答案不能为空!')
+              return
+            }
+            //校验单选选修
+            if (object.exercisesType == '1' && this.rightList.length > 1) {
+              this.errorMsg('单选只可选择一个答案!')
+              return
+            }
+
+            console.log('入参---：', JSON.stringify(object))
+            await this.$store.dispatch(
+              `exercise/addExercisesInfo`,
+              object
+            )
+            this.$message({
+              type: 'success',
+              message: '新增成功!'
+            })
+            this.editdialog.dialogFormVisible = false
+            this.getData()
+          } else {
+            return
+          }
+        })
+      },
+      /**
+       * 错误弹框
+       * */
+      errorMsg(msg) {
+        this.$alert(msg, '错误', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${action}`
+            })
+          }
+        })
+      },
+      /**
+       * 校验集合是否包含这个值
+       * */
+      contains(array, value) {
+        let res = false
+        for (let i in array) {
+          if (array[i] == value) {
+            return true
+          }
+        }
+        return res
+      }
+
     },
 
-
-
-  },
-
-  /*数据*/
-  data() {
-    return {
-      listQuery: {},
-      tableData: [],
-      editdialog: {
-        dialogFormVisible: false,
-        dialogStatus: '',
-        title: '详细信息',
-        date: {}
+    /*数据*/
+    data() {
+      return {
+        listQuery: {},
+        tableData: [],
+        editdialog: {
+          dialogFormVisible: false,
+          dialogStatus: '',
+          title: '详细信息',
+          date: {}
+        },
+        rightList: [],
+        options: allOptions,
+        exercisesTypeEnum: [
+          { id: 1, content: '单选' },
+          { id: 2, content: '多选' }
+        ]
       }
     }
   }
-}
 </script>
 
 <style scoped>
-.line {
-  text-align: center;
-}
+  .line {
+    text-align: center;
+  }
 </style>
 

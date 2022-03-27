@@ -17,7 +17,7 @@ public class ExercisesInfoListVO {
     private String exercisesTitle;
 
     //题目类型
-    private Integer exercisesType;
+    private String exercisesType;
 
     //题目答案集合
     private List<ExercisesOptionsListVO> optionsList;

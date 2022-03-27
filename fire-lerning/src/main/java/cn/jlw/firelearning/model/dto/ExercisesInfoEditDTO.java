@@ -23,7 +23,7 @@ public class ExercisesInfoEditDTO {
 
     //题目类型
     @NotNull(message = "题目类型不能为空!")
-    private Integer exercisesType;
+    private String exercisesType;
 
     //题目答案集合
     @Valid

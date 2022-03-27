@@ -31,7 +31,7 @@ public class ExercisesInfoAddDTO implements Serializable {
      * 题目类型(1单选2多选)
      */
     @NotNull(message = "题目类型不能为空!")
-    private Integer exercisesType;
+    private String exercisesType;
 
     /**
      * 答案

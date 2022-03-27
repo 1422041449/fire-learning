@@ -2,6 +2,7 @@ package cn.jlw.firelearning.model;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 
 /**
@@ -30,6 +31,7 @@ public class LeRequest<T> implements Serializable {
     /**
      * 请求参数
      */
+    @Valid
     private T content;
     /**
      * 签名

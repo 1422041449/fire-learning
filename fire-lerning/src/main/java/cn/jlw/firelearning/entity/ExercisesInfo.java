@@ -26,7 +26,6 @@ public class ExercisesInfo implements Serializable {
     /**
      * 习题编号
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer exercisesNum;
 
     /**
@@ -37,7 +36,7 @@ public class ExercisesInfo implements Serializable {
     /**
      * 题目类型(1单选2多选)
      */
-    private Integer exercisesType;
+    private String exercisesType;
 
 
 }

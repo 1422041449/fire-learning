@@ -24,6 +24,6 @@ public class ExercisesInfoListDTO implements Serializable {
     /**
      * 题目类型(1单选2多选)
      */
-    private Integer exercisesType;
+    private String exercisesType;
 
 }

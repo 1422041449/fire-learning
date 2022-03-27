@@ -166,7 +166,7 @@ export default {
         }
       })
     },
-    //开启模态框
+    // 开启模态框
     add(row, state) {
       this.editdialog.dialogFormVisible = true
       this.editdialog.date = Object.assign({}, row)

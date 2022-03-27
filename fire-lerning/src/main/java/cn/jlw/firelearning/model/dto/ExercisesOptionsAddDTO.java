@@ -3,7 +3,6 @@ package cn.jlw.firelearning.model.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * 答案选项表
@@ -25,6 +24,5 @@ public class ExercisesOptionsAddDTO {
     /**
      * 是否是正确答案(1是2否)
      */
-    @NotNull(message = "是否为正确答案不能为空!")
-    private Integer ifRight;
+    private String ifRight;
 }

@@ -25,5 +25,5 @@ public class ExercisesOptionsListVO {
     /**
      * 是否是正确答案(1是2否)
      */
-    private Integer ifRight;
+    private String ifRight;
 }

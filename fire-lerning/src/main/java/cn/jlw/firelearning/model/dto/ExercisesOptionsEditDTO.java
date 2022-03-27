@@ -32,5 +32,5 @@ public class ExercisesOptionsEditDTO {
      * 是否是正确答案(1是2否)
      */
     @NotNull(message = "是否为正确答案不能为空!")
-    private Integer ifRight;
+    private String ifRight;
 }
