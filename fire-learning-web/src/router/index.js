@@ -50,7 +50,7 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
+  }
   //
   // {
   //   path: '/404',
@@ -209,19 +209,17 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/firelearningMgr',
+    path: '/stageMgr',
     component: Layout,
     children: [
       {
-        path: 'firelearningMgr',
-        name: 'FirelearningMgr',
-        component: () => import('@/views/admin/firelearningMgr/index'),
-        meta: { title: '消防学习管理', icon: 'form', role: ['admin'] }
+        path: 'stageMgr',
+        name: 'stageMgr',
+        component: () => import('@/views/admin/stage/StageInfo'),
+        meta: { title: '阶段学习管理', icon: 'form', role: ['admin'] }
       }
     ]
   },
-
-
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
