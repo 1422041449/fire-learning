@@ -9,6 +9,7 @@ import cn.jlw.firelearning.model.dto.StageInfoListDTO;
 import cn.jlw.firelearning.model.vo.StageInfoListVO;
 import cn.jlw.firelearning.service.StageInfoService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ import java.util.List;
  * @since 2022-03-08
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/stage/info")
 public class StageInfoController {

@@ -7,33 +7,27 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户阶段信息表
+ * 阶段学习题目表
  * </p>
  *
  * @author jlw
- * @since 2022-03-08
+ * @since 2022-03-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class UserStageInfo implements Serializable {
+public class StageLearn implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 阶段学习id
      */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
-    /**
-     * 用户名
-     */
-    private String username;
+    private Integer stageLearnId;
 
     /**
      * 阶段号
@@ -41,19 +35,14 @@ public class UserStageInfo implements Serializable {
     private Integer stageNum;
 
     /**
-     * 学习状态(1已完成2未完成)
+     * 习题编号
      */
-    private Integer learnState;
+    private Integer exercisesNum;
 
     /**
-     * 考试成绩
+     * 创建时间
      */
-    private BigDecimal testScore;
-
-    /**
-     * 成绩等级
-     */
-    private String scoreLevel;
+    private LocalDateTime crtime;
 
 
 }

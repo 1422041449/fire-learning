@@ -1,7 +1,7 @@
 package cn.jlw.firelearning.service;
 
 
-import cn.jlw.firelearning.entity.UserStageInfo;
+import cn.jlw.firelearning.entity.UserStageTest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author jlw
- * @since 2022-03-08
+ * @since 2022-03-30
  */
-public interface UserStageInfoService extends IService<UserStageInfo> {
+public interface UserStageTestService extends IService<UserStageTest> {
 
 }

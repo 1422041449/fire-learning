@@ -1,7 +1,7 @@
 package cn.jlw.firelearning.mapper;
 
 
-import cn.jlw.firelearning.entity.UserStageInfo;
+import cn.jlw.firelearning.entity.UserStageLearn;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author jlw
- * @since 2022-03-08
+ * @since 2022-03-30
  */
-public interface UserStageInfoMapper extends BaseMapper<UserStageInfo> {
+public interface UserStageLearnMapper extends BaseMapper<UserStageLearn> {
 
 }
