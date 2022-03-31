@@ -2,6 +2,12 @@
   <div class="app-container">
     <el-header>
       <div class="filter-container">
+        <el-button
+          icon="el-icon-arrow-left"
+          @click="$router.back()"
+          style="margin-right: 10px"
+        >返回
+        </el-button>
         <el-input
           v-model="listQuery.exercisesTitle"
           clearable
@@ -29,7 +35,7 @@
           v-waves
           type="primary"
           style="margin-left: 10px"
-          @click="add(null, 'create')"
+          @click="add({}, 'create')"
         >新增
         </el-button>
       </div>
@@ -121,34 +127,15 @@
         :model="editdialog.data"
         label-width="100px"
       >
-        <el-form-item label="题目编号">
-          <el-input v-model="editdialog.data.exercisesNum" disabled placeholder="新增自动生成"/>
-        </el-form-item>
         <el-form-item label="题目">
-          <el-input v-model="editdialog.data.exercisesTitle"/>
-        </el-form-item>
-        <el-form-item label="题目类型">
-          <template>
-            <el-radio v-model="editdialog.data.exercisesType" label="1">单选</el-radio>
-            <el-radio v-model="editdialog.data.exercisesType" label="2">多选</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item label="选项A">
-          <el-input v-model="editdialog.data.anasA"/>
-        </el-form-item>
-        <el-form-item label="选项B">
-          <el-input v-model="editdialog.data.anasB"/>
-        </el-form-item>
-        <el-form-item label="选项C">
-          <el-input v-model="editdialog.data.anasC"/>
-        </el-form-item>
-        <el-form-item label="正确答案">
-          <template>
-            <el-checkbox-group
-              v-model="rightList">
-              <el-checkbox v-for="option in options" :label="option" :key="option">{{option}}</el-checkbox>
-            </el-checkbox-group>
-          </template>
+          <el-select v-model="editdialog.data.exercisesNum" placeholder="选择题目" filterable>
+            <el-option
+              v-for="item in allExercises"
+              :key="item.exercisesNum"
+              :label="item.exercisesTypeName+'_'+item.exercisesTitle"
+              :value="item.exercisesNum">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -169,6 +156,9 @@
   export default {
     /*初始化执行方法*/
     async created() {
+      let stageInfo = this.$route.query.stageInfo
+      console.log('路由携带数据：', stageInfo)
+      this.stageInfo = JSON.parse(stageInfo)
       this.getData()
     },
 
@@ -184,7 +174,7 @@
           }
         })
         let res = await this.$store.dispatch(
-          'exercise/listExercisesInfo',
+          'stageLearn/listStageLearn',
           object
         )
         console.log('查询返回内容--:' + JSON.stringify(res))
@@ -195,34 +185,23 @@
       //新增修改控制模态框开启
       async add(row, state) {
         console.log('编辑行数据--：{}', row)
-        if (this.$refs.form) {
-          this.$refs.form.resetFields()
-        }
-        let obj = Object.assign({}, row)
-        let rightList = []
-        for (let i in obj.optionsList) {
-          let option = obj.optionsList[i]
-          if (option.optionNum == 'A') {
-            obj.anasA = option.optionContent
-            if (option.ifRight == 1) {
-              rightList.push(option.optionNum)
-            }
-          } else if (option.optionNum == 'B') {
-            obj.anasB = option.optionContent
-            if (option.ifRight == 1) {
-              rightList.push(option.optionNum)
-            }
-          } else if (option.optionNum == 'C') {
-            obj.anasC = option.optionContent
-            if (option.ifRight == 1) {
-              rightList.push(option.optionNum)
-            }
+        this.editdialog.data = Object.assign({}, row)
+        //获取题目信息
+        let res = await this.$store.dispatch(
+          'exercise/listExercisesInfo',
+          {}
+        )
+        this.allExercises = res.data
+        for (let i in this.allExercises) {
+          let obj = this.allExercises[i]
+          if (obj.exercisesType == 1) {
+            this.allExercises[i].exercisesTypeName = '单选'
+          } else if (obj.exercisesType == 2) {
+            this.allExercises[i].exercisesTypeName = '多选'
           }
         }
-        this.rightList = rightList
-        console.log('编辑组装后数据---：{}', obj)
+        console.log('所有题目数据：', this.allExercises)
 
-        this.editdialog.data = obj
         this.editdialog.dialogStatus = state
         this.editdialog.dialogFormVisible = true
 
@@ -236,10 +215,12 @@
           cancelButtonText: '取消',
           type: 'warning'
         })
-        console.log(row)
+        let object = Object.assign({}, row)
+        object.stageNum = this.stageInfo.stageNum
+        console.log("删除---入参：",object)
         let res = await this.$store.dispatch(
-          `exercise/deleteExercisesInfo`,
-          row.exercisesNum
+          `stageLearn/deleteStageLearn`,
+          object
         )
         this.tableData.splice(index, 1)
         this.$message({
@@ -255,43 +236,10 @@
           if (valid) {
             console.log('调用修改接口入参--：{}', this.editdialog.data)
             let object = this.editdialog.data
-            for (let i in object.optionsList) {
-              let option = object.optionsList[i]
-              if (option.optionNum == 'A') {
-                option.optionContent = this.editdialog.data.anasA
-                if (this.contains(this.rightList, 'A')) {
-                  option.ifRight = 1
-                } else {
-                  option.ifRight = 2
-                }
-              } else if (option.optionNum == 'B') {
-                option.optionContent = this.editdialog.data.anasB
-                if (this.contains(this.rightList, 'B')) {
-                  option.ifRight = 1
-                } else {
-                  option.ifRight = 2
-                }
-              } else if (option.optionNum == 'C') {
-                option.optionContent = this.editdialog.data.anasC
-                if (this.contains(this.rightList, 'C')) {
-                  option.ifRight = 1
-                } else {
-                  option.ifRight = 2
-                }
-              }
-            }
-            if (this.rightList.length == 0) {
-              this.errorMsg('正确答案不能为空!')
-              return
-            }
-            //校验单选选修
-            if (object.exercisesType == '1' && this.rightList.length > 1) {
-              this.errorMsg('单选只可选择一个答案!')
-              return
-            }
+            object.stageNum = this.stageInfo.stageNum
             console.log('调用修改接口入参--：{}', object)
             await this.$store.dispatch(
-              `exercise/editExercisesInfo`,
+              `stageLearn/editStageLearn`,
               object
             )
             this.$message({
@@ -305,53 +253,19 @@
           }
         })
       },
+
       //新增
-      create() {
+      async create() {
         this.$refs['form'].validate(async(valid) => {
           if (valid) {
             console.log('编辑框内容：' + JSON.stringify(this.editdialog.data))
             console.log('编辑框内容：' + this.rightList)
             let object = {}
-            object.exercisesTitle = this.editdialog.data.exercisesTitle
-            object.exercisesType = this.editdialog.data.exercisesType
-            let optionsList = []
-            let anasA = {}
-            anasA.optionNum = 'A'
-            anasA.optionContent = this.editdialog.data.anasA
-            let anasB = {}
-            anasB.optionNum = 'B'
-            anasB.optionContent = this.editdialog.data.anasB
-            let anasC = {}
-            anasC.optionNum = 'C'
-            anasC.optionContent = this.editdialog.data.anasC
-            for (let i in this.rightList) {
-              let value = this.rightList[i]
-              if (value === 'A') {
-                anasA.ifRight = 1
-              } else if (value === 'B') {
-                anasB.ifRight = 1
-              } else if (value === 'C') {
-                anasC.ifRight = 1
-              }
-            }
-            optionsList.push(anasA)
-            optionsList.push(anasB)
-            optionsList.push(anasC)
-            object.optionsList = optionsList
-
-            if (this.rightList.length == 0) {
-              this.errorMsg('正确答案不能为空!')
-              return
-            }
-            //校验单选选修
-            if (object.exercisesType == '1' && this.rightList.length > 1) {
-              this.errorMsg('单选只可选择一个答案!')
-              return
-            }
-
+            object.stageNum = this.stageInfo.stageNum
+            object.exercisesNum = this.editdialog.data.exercisesNum
             console.log('入参---：', JSON.stringify(object))
             await this.$store.dispatch(
-              `exercise/addExercisesInfo`,
+              `stageLearn/addStageLearn`,
               object
             )
             this.$message({
@@ -403,16 +317,21 @@
           dialogFormVisible: false,
           dialogStatus: '',
           title: '详细信息',
-          data: {}
+          data: {
+            exercises: ''
+          }
         },
         rightList: [],
         options: allOptions,
         exercisesTypeEnum: [
           { id: 1, content: '单选' },
           { id: 2, content: '多选' }
-        ]
+        ],
+        stageInfo: {},
+        allExercises: []
       }
     }
+
   }
 </script>
 

@@ -22,7 +22,7 @@ import java.util.List;
 public interface ExercisesInfoMapper extends BaseMapper<ExercisesInfo> {
 
     //获取题目信息
-    @Select("select * from exercises_info ${ew.customSqlSegment}")
+    @Select("select * from exercises_info ${ew.customSqlSegment} order by exercises_type")
     List<ExercisesInfoListVO> listExercisesInfo(@Param(Constants.WRAPPER) LambdaQueryWrapper<ExercisesInfo> lambdaQueryWrapper);
 
 }

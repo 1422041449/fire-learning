@@ -123,23 +123,23 @@
     >
       <el-form
         ref="form"
-        :model="editdialog.date"
+        :model="editdialog.data"
         label-width="100px"
       >
         <el-form-item label="用户名">
-          <el-input v-model="editdialog.date.username" disabled/>
+          <el-input v-model="editdialog.data.username" disabled/>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="editdialog.date.password"/>
+          <el-input v-model="editdialog.data.password"/>
         </el-form-item>
         <el-form-item label="昵称">
-          <el-input v-model="editdialog.date.name"/>
+          <el-input v-model="editdialog.data.name"/>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="editdialog.date.phone"/>
+          <el-input v-model="editdialog.data.phone"/>
         </el-form-item>
         <el-form-item label="真实姓名">
-          <el-input v-model="editdialog.date.realName"/>
+          <el-input v-model="editdialog.data.realName"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -189,7 +189,7 @@ export default {
 
       let obj = Object.assign({}, row)
       this.editdialog.dialogFormVisible = true
-      this.editdialog.date = obj
+      this.editdialog.data = obj
       this.editdialog.dialogStatus = state
     },
 
@@ -218,10 +218,10 @@ export default {
     update() {
       this.$refs["form"].validate(async (valid) => {
         if (valid) {
-          console.log(this.editdialog.date);
+          console.log(this.editdialog.data);
           await this.$store.dispatch(
             `userinfo/updateUserInfo`,
-            this.editdialog.date
+            this.editdialog.data
           );
           this.$message({
             type: "success",
@@ -248,7 +248,7 @@ export default {
         dialogFormVisible: false,
         dialogStatus: '',
         title: '详细信息',
-        date: {}
+        data: {}
       }
     }
   }

@@ -53,18 +53,18 @@
 
     <el-dialog :title="editdialog.title" :visible.sync="editdialog.dialogFormVisible" :show-close="true"
                :close-on-click-modal="false" width="800px" id="dialog-input">
-      <el-form :model="editdialog.date" label-width="120px" ref="form">
+      <el-form :model="editdialog.data" label-width="120px" ref="form">
         <el-form-item label="手机号" :label-width="formLabelWidth">
-          <el-input v-model="editdialog.date.phone" autocomplete="off"></el-input>
+          <el-input v-model="editdialog.data.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input v-model="editdialog.date.password" autocomplete="off"></el-input>
+          <el-input v-model="editdialog.data.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="昵称" :label-width="formLabelWidth">
-          <el-input v-model="editdialog.date.name" autocomplete="off"></el-input>
+          <el-input v-model="editdialog.data.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" :label-width="formLabelWidth">
-          <el-input v-model="editdialog.date.realName" autocomplete="off"></el-input>
+          <el-input v-model="editdialog.data.realName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="头像" :label-width="formLabelWidth">
           <el-upload
@@ -115,7 +115,7 @@ export default {
         dialogFormVisible: false,
         dialogStatus: '',
         title: '详细信息',
-        date: {}
+        data: {}
       },
       loginForm: {
         username: '',
@@ -169,14 +169,14 @@ export default {
     // 开启模态框
     add(row, state) {
       this.editdialog.dialogFormVisible = true
-      this.editdialog.date = Object.assign({}, row)
+      this.editdialog.data = Object.assign({}, row)
       this.editdialog.dialogStatus = state
     },
     //注册
     async register() {
       this.$refs['form'].validate(async(valid) => {
         console.log(valid)
-        let obj = this.editdialog.date
+        let obj = this.editdialog.data
         obj.avatar = this.imageUrl
         console.log('请求入参:', obj)
         if (valid) {

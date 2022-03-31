@@ -46,7 +46,7 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
         //检验题目是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
                 .eq(StageLearn::getStageNum, content.getStageNum())
-                .eq(StageLearn::getExercisesNum, content.getStageNum()));
+                .eq(StageLearn::getExercisesNum, content.getExercisesNum()));
         if (check > 0) {
             throw new LeException("题目已存在!");
         }
@@ -78,7 +78,7 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
         //检验题目是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
                 .eq(StageLearn::getStageNum, content.getStageNum())
-                .eq(StageLearn::getExercisesNum, content.getStageNum())
+                .eq(StageLearn::getExercisesNum, content.getExercisesNum())
                 .ne(StageLearn::getStageLearnId, content.getStageLearnId()));
         if (check > 0) {
             throw new LeException("题目已存在!");

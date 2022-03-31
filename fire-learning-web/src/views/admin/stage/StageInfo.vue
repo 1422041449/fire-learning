@@ -96,9 +96,30 @@
           fixed="right"
           label="操作栏"
           align="center"
-          width="220"
+          width="500"
         >
           <template slot-scope="{ row, $index }">
+            <el-button
+              type="success"
+              size="small"
+              @click="add(row, 'update')"
+            >
+              发布
+            </el-button>
+            <el-button
+              type="warning"
+              size="small"
+              @click="routerStageLearn(row)"
+            >
+              阶段学习题
+            </el-button>
+            <el-button
+              type="warning"
+              size="small"
+              @click="add(row, 'update')"
+            >
+              阶段考试题
+            </el-button>
             <el-button
               type="primary"
               size="small"
@@ -122,17 +143,17 @@
     >
       <el-form
         ref="form"
-        :model="editdialog.date"
+        :model="editdialog.data"
         label-width="100px"
       >
         <el-form-item label="阶段号">
-          <el-input v-model="editdialog.date.stageNum" disabled placeholder="新增自动生成"/>
+          <el-input v-model="editdialog.data.stageNum" disabled placeholder="新增自动生成"/>
         </el-form-item>
         <el-form-item label="阶段名称">
-          <el-input v-model="editdialog.date.stageName"/>
+          <el-input v-model="editdialog.data.stageName"/>
         </el-form-item>
         <el-form-item label="阶段标题">
-          <el-input v-model="editdialog.date.stageTitle"/>
+          <el-input v-model="editdialog.data.stageTitle"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -182,7 +203,7 @@
 
         let obj = Object.assign({}, row)
         this.editdialog.dialogFormVisible = true
-        this.editdialog.date = obj
+        this.editdialog.data = obj
         this.editdialog.dialogStatus = state
       },
 
@@ -211,10 +232,10 @@
       update() {
         this.$refs['form'].validate(async(valid) => {
           if (valid) {
-            console.log(this.editdialog.date)
+            console.log(this.editdialog.data)
             await this.$store.dispatch(
               `stage/editStageInfo`,
-              this.editdialog.date
+              this.editdialog.data
             )
             this.$message({
               type: 'success',
@@ -231,10 +252,10 @@
       create() {
         this.$refs['form'].validate(async(valid) => {
           if (valid) {
-            console.log(this.editdialog.date)
+            console.log(this.editdialog.data)
             await this.$store.dispatch(
               `stage/addStageInfo`,
-              this.editdialog.date
+              this.editdialog.data
             )
             this.$message({
               type: 'success',
@@ -246,6 +267,10 @@
             return
           }
         })
+      },
+      //跳转阶段学习页面
+      routerStageLearn(row){
+        this.$router.push({ path: 'stageLearn', query: { stageInfo: JSON.stringify(row)} })
       }
 
     },
@@ -259,7 +284,7 @@
           dialogFormVisible: false,
           dialogStatus: '',
           title: '详细信息',
-          date: {}
+          data: {}
         },
         ifPublishEnum: [
           { id: 1, content: '已发布' },
