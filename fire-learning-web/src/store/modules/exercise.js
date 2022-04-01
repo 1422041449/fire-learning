@@ -1,4 +1,10 @@
-import { addExercisesInfo, deleteExercisesInfo, editExercisesInfo, listExercisesInfo } from '@/api/exercise'
+import {
+  addExercisesInfo,
+  deleteExercisesInfo,
+  editExercisesInfo,
+  listExercisesInfo,
+  listStageLearnExercises
+} from '@/api/exercise'
 
 // const getDefaultState = () => {
 //   return {
@@ -49,7 +55,15 @@ const actions = {
       })
     })
   },
-
+  listStageLearnExercises({}, data) {
+    return new Promise((resolve, reject) => {
+      listStageLearnExercises(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
 
 }
 

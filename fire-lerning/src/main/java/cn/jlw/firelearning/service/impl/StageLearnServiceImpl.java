@@ -16,6 +16,7 @@ import cn.jlw.firelearning.model.dto.StageLearnDeleteDTO;
 import cn.jlw.firelearning.model.dto.StageLearnEditDTO;
 import cn.jlw.firelearning.model.dto.StageLearnListDTO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import cn.jlw.firelearning.model.vo.StageLearnListVO;
 import cn.jlw.firelearning.service.StageLearnService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -58,6 +59,7 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
     @Override
     public List<StageLearnListVO> listStageLearn(StageLearnListDTO content) {
         QueryWrapper<StageLearn> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("a.stage_num", content.getStageNum());
         if (StrUtil.isNotBlank(content.getExercisesTitle())) {
             queryWrapper.like("b.exercises_title", content.getExercisesTitle());
         }
@@ -106,4 +108,5 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
         baseMapper.delete(Wrappers.lambdaQuery(StageLearn.class)
                 .eq(StageLearn::getStageLearnId, content.getStageLearnId()));
     }
+
 }

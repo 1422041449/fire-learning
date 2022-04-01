@@ -7,6 +7,7 @@ import cn.jlw.firelearning.model.dto.ExercisesInfoAddDTO;
 import cn.jlw.firelearning.model.dto.ExercisesInfoEditDTO;
 import cn.jlw.firelearning.model.dto.ExercisesInfoListDTO;
 import cn.jlw.firelearning.model.vo.ExercisesInfoListVO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import cn.jlw.firelearning.service.ExercisesInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,5 +72,15 @@ public class ExercisesInfoController {
         Integer exercisesNum = leRequest.getContent();
         exercisesInfoService.deleteExercisesInfo(exercisesNum);
         return LeResponse.succ();
+    }
+
+    /**
+     * 获取题库中当前阶段未被选择的题目
+     */
+    @PostMapping("/list/stageLearn/exercises")
+    public LeResponse<List<ListStageLearnExercisesVO>> listStageLearnExercises(@Valid @RequestBody LeRequest<Integer> leRequest) {
+        Integer stageNum = leRequest.getContent();
+        List<ListStageLearnExercisesVO> resultList = exercisesInfoService.listStageLearnExercises(stageNum);
+        return LeResponse.succ(resultList);
     }
 }

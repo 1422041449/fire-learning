@@ -172,6 +172,7 @@
             object[v] = this.listQuery[v]
           }
         })
+        object.stageNum = this.stageInfo.stageNum
         let res = await this.$store.dispatch(
           'stageLearn/listStageLearn',
           object
@@ -185,10 +186,10 @@
       async add(row, state) {
         console.log('编辑行数据--：{}', row)
         this.editdialog.data = Object.assign({}, row)
-        //获取题目信息
+        //获取当前阶段未被选择的题目信息
         let res = await this.$store.dispatch(
-          'exercise/listExercisesInfo',
-          {}
+          'exercise/listStageLearnExercises',
+          this.stageInfo.stageNum
         )
         this.allExercises = res.data
         for (let i in this.allExercises) {

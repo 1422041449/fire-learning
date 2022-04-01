@@ -60,3 +60,16 @@ export function deleteExercisesInfo(data) {
     data: obj
   })
 }
+
+//删除题目
+export function listStageLearnExercises(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/exercises/info/list/stageLearn/exercises',
+    method: 'post',
+    data: obj
+  })
+}

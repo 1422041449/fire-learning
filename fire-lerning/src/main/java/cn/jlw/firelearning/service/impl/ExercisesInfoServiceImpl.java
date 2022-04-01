@@ -14,6 +14,7 @@ import cn.jlw.firelearning.mapper.StageTestMapper;
 import cn.jlw.firelearning.model.dto.*;
 import cn.jlw.firelearning.model.vo.ExercisesInfoListVO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import cn.jlw.firelearning.service.ExercisesInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -124,5 +125,10 @@ public class ExercisesInfoServiceImpl extends ServiceImpl<ExercisesInfoMapper, E
                 .eq(ExercisesInfo::getExercisesNum, exercisesNum));
         exercisesOptionMapper.delete(Wrappers.lambdaQuery(ExercisesOption.class)
                 .eq(ExercisesOption::getExercisesNum, exercisesNum));
+    }
+
+    @Override
+    public List<ListStageLearnExercisesVO> listStageLearnExercises(Integer stageNum) {
+        return baseMapper.listStageLearnExercises(stageNum);
     }
 }

@@ -3,6 +3,7 @@ package cn.jlw.firelearning.mapper;
 
 import cn.jlw.firelearning.entity.ExercisesInfo;
 import cn.jlw.firelearning.model.vo.ExercisesInfoListVO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -25,4 +26,7 @@ public interface ExercisesInfoMapper extends BaseMapper<ExercisesInfo> {
     @Select("select * from exercises_info ${ew.customSqlSegment} order by exercises_type")
     List<ExercisesInfoListVO> listExercisesInfo(@Param(Constants.WRAPPER) LambdaQueryWrapper<ExercisesInfo> lambdaQueryWrapper);
 
+    //获取阶段学习未被绑定题目信息
+    @Select("select a.exercises_num,a.exercises_title,a.exercises_type from exercises_info a LEFT JOIN stage_learn b on a.exercises_num = b.exercises_num and b.stage_num = #{stageNum} where b.stage_learn_id is null")
+    List<ListStageLearnExercisesVO> listStageLearnExercises(Integer stageNum);
 }

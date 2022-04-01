@@ -12,4 +12,7 @@ public class StageLearnListDTO {
 
     //题目类型
     private String exercisesType;
+
+    //阶段号
+    private Integer stageNum;
 }

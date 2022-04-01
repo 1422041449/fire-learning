@@ -6,6 +6,7 @@ import cn.jlw.firelearning.model.dto.ExercisesInfoAddDTO;
 import cn.jlw.firelearning.model.dto.ExercisesInfoEditDTO;
 import cn.jlw.firelearning.model.dto.ExercisesInfoListDTO;
 import cn.jlw.firelearning.model.vo.ExercisesInfoListVO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -39,4 +40,9 @@ public interface ExercisesInfoService extends IService<ExercisesInfo> {
      * 删除题目
      */
     void deleteExercisesInfo(Integer exercisesNum);
+
+    /**
+     * 获取题库中当前阶段未被选择的题目
+     */
+    List<ListStageLearnExercisesVO> listStageLearnExercises(Integer stageNum);
 }

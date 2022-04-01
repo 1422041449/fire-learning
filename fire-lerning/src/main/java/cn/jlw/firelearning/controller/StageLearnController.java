@@ -7,6 +7,7 @@ import cn.jlw.firelearning.model.dto.StageLearnAddDTO;
 import cn.jlw.firelearning.model.dto.StageLearnDeleteDTO;
 import cn.jlw.firelearning.model.dto.StageLearnEditDTO;
 import cn.jlw.firelearning.model.dto.StageLearnListDTO;
+import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import cn.jlw.firelearning.model.vo.StageLearnListVO;
 import cn.jlw.firelearning.service.StageLearnService;
 import lombok.RequiredArgsConstructor;
