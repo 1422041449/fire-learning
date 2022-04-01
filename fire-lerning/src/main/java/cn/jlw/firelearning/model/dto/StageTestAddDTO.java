@@ -1,4 +1,4 @@
-package cn.jlw.firelearning.entity;
+package cn.jlw.firelearning.model.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,22 +18,9 @@ import java.time.LocalDateTime;
  * @since 2022-03-30
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class StageTest implements Serializable {
+public class StageTestAddDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 阶段考试id
-     */
-    @TableId(value = "stage_test_id", type = IdType.AUTO)
-    private Integer stageTestId;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime crtime;
 
     /**
      * 阶段学习id
@@ -44,5 +31,4 @@ public class StageTest implements Serializable {
      * 阶段号
      */
     private Integer stageNum;
-
 }
