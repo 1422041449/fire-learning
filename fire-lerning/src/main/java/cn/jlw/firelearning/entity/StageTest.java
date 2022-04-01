@@ -27,6 +27,7 @@ public class StageTest implements Serializable {
     /**
      * 阶段考试id
      */
+    @TableId(value = "stage_test_id", type = IdType.AUTO)
     private Integer stageTestId;
 
     /**

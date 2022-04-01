@@ -26,6 +26,7 @@ public class ExercisesInfo implements Serializable {
     /**
      * 习题编号
      */
+    @TableId(value = "exercises_num", type = IdType.AUTO)
     private Integer exercisesNum;
 
     /**

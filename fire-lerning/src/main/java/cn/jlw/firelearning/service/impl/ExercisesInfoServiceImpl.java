@@ -5,9 +5,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.jlw.firelearning.entity.ExercisesInfo;
 import cn.jlw.firelearning.entity.ExercisesOption;
+import cn.jlw.firelearning.entity.StageLearn;
 import cn.jlw.firelearning.exception.LeException;
 import cn.jlw.firelearning.mapper.ExercisesInfoMapper;
 import cn.jlw.firelearning.mapper.ExercisesOptionMapper;
+import cn.jlw.firelearning.mapper.StageLearnMapper;
+import cn.jlw.firelearning.mapper.StageTestMapper;
 import cn.jlw.firelearning.model.dto.*;
 import cn.jlw.firelearning.model.vo.ExercisesInfoListVO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
@@ -33,6 +36,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExercisesInfoServiceImpl extends ServiceImpl<ExercisesInfoMapper, ExercisesInfo> implements ExercisesInfoService {
     private final ExercisesOptionMapper exercisesOptionMapper;
+    private final StageLearnMapper stageLearnMapper;
+    private final StageTestMapper stageTestMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -108,6 +113,13 @@ public class ExercisesInfoServiceImpl extends ServiceImpl<ExercisesInfoMapper, E
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteExercisesInfo(Integer exercisesNum) {
+        //阶段学习题和考试题在使用不可删除
+        Integer checkStageLearn = stageLearnMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
+                .eq(StageLearn::getExercisesNum, exercisesNum));
+        if (checkStageLearn > 0) {
+            throw new LeException("题目已使用不可删除!");
+        }
+
         baseMapper.delete(Wrappers.lambdaQuery(ExercisesInfo.class)
                 .eq(ExercisesInfo::getExercisesNum, exercisesNum));
         exercisesOptionMapper.delete(Wrappers.lambdaQuery(ExercisesOption.class)

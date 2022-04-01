@@ -26,6 +26,7 @@ public class UserStageTest implements Serializable {
     /**
      * 主键id
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**

@@ -27,6 +27,7 @@ public class StageLearn implements Serializable {
     /**
      * 阶段学习id
      */
+    @TableId(value = "stage_learn_id", type = IdType.AUTO)
     private Integer stageLearnId;
 
     /**

@@ -46,7 +46,6 @@
       <el-table
         :data="tableData"
         style="width: 100%"
-        max-height="500"
         stripe
         border>
         <el-table-column
