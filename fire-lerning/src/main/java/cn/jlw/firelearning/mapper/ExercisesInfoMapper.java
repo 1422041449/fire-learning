@@ -27,6 +27,8 @@ public interface ExercisesInfoMapper extends BaseMapper<ExercisesInfo> {
     List<ExercisesInfoListVO> listExercisesInfo(@Param(Constants.WRAPPER) LambdaQueryWrapper<ExercisesInfo> lambdaQueryWrapper);
 
     //获取阶段学习未被绑定题目信息
-    @Select("select a.exercises_num,a.exercises_title,a.exercises_type from exercises_info a LEFT JOIN stage_learn b on a.exercises_num = b.exercises_num and b.stage_num = #{stageNum} where b.stage_learn_id is null")
+    @Select("select a.exercises_num,a.exercises_title,a.exercises_type from exercises_info a " +
+            "LEFT JOIN stage_learn b on a.exercises_num = b.exercises_num and b.stage_num = #{stageNum} " +
+            "where b.stage_learn_id is null order by a.exercises_type,b.crtime desc")
     List<ListStageLearnExercisesVO> listStageLearnExercises(Integer stageNum);
 }

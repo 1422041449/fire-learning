@@ -39,4 +39,9 @@ public interface StageInfoService extends IService<StageInfo> {
      * 删除阶段
      */
     void deleteStageInfo(Integer stageNum);
+
+    /**
+     * 发布阶段
+     */
+    void publishStageInfo(Integer stageNum);
 }

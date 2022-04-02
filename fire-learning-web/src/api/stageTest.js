@@ -9,67 +9,55 @@ let dataObj = {
   sign: 'dafdsf'
 }
 
-//创建阶段
-export function addStageInfo(data) {
+//创建阶段考试题
+export function addStageTest(data) {
   let obj = JSON.parse(JSON.stringify(dataObj))
   if (data) {
     obj.content = data
   }
   return request({
-    url: '/stage/info/add/stage/info',
+    url: '/stage/test/add',
     method: 'post',
     data: obj
   })
 }
 
-//查询阶段
-export function listStageInfo(data) {
+//查询阶段考试题
+export function listStageTest(data) {
   let obj = JSON.parse(JSON.stringify(dataObj))
   if (data) {
     obj.content = data
   }
   return request({
-    url: '/stage/info/list/stage/info',
+    url: '/stage/test/list',
     method: 'post',
     data: obj
   })
 }
 
-//修改阶段
-export function editStageInfo(data) {
+//修改阶段考试题
+export function editStageTest(data) {
   let obj = JSON.parse(JSON.stringify(dataObj))
   if (data) {
     obj.content = data
   }
   return request({
-    url: '/stage/info/edit/stage/info',
+    url: '/stage/test/edit',
     method: 'post',
     data: obj
   })
 }
 
-//删除阶段
-export function deleteStageInfo(data) {
+//删除阶段考试题
+export function deleteStageTest(data) {
   let obj = JSON.parse(JSON.stringify(dataObj))
   if (data) {
     obj.content = data
   }
   return request({
-    url: '/stage/info/delete/stage/info',
+    url: '/stage/test/delete',
     method: 'post',
     data: obj
   })
 }
 
-//发布阶段
-export function publishStage(data) {
-  let obj = JSON.parse(JSON.stringify(dataObj))
-  if (data) {
-    obj.content = data
-  }
-  return request({
-    url: '/stage/info/publish',
-    method: 'post',
-    data: obj
-  })
-}

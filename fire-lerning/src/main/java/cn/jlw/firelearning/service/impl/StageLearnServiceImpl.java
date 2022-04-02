@@ -109,4 +109,9 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
                 .eq(StageLearn::getStageLearnId, content.getStageLearnId()));
     }
 
+    @Override
+    public List<ListStageLearnExercisesVO> listStageTestExercises(Integer stageNum) {
+        return baseMapper.listStageTestExercises(stageNum);
+    }
+
 }

@@ -22,17 +22,24 @@ import java.util.List;
 public interface StageTestMapper extends BaseMapper<StageTest> {
     /**
      * 查询阶段考试题
+     *
      * @param queryWrapper
      * @return
      */
     @Select("select a.*,c.* from stage_test a join stage_learn b on a.stage_learn_id = b.stage_learn_id join exercises_info c on c.exercises_num = b.exercises_num " +
-            "${ew.customSqlSegment} ORDER BY a.crtime desc")
-    List<StageTestListVO> listStageTest(@Param(Constants.WRAPPER)QueryWrapper<StageTest> queryWrapper);
+            "${ew.customSqlSegment} ORDER BY c.exercises_type,a.crtime desc")
+    List<StageTestListVO> listStageTest(@Param(Constants.WRAPPER) QueryWrapper<StageTest> queryWrapper);
 
     /**
      * 查询阶段考试题中单选多选的个数
      */
     @Select("select count(*) from stage_test a join stage_learn b on a.stage_learn_id = b.stage_learn_id join exercises_info c on c.exercises_num = b.exercises_num " +
             "${ew.customSqlSegment}")
-    Integer checkDanxuanNum(@Param(Constants.WRAPPER)QueryWrapper<StageTest> queryWrapper);
+    Integer checkDanxuanNum(@Param(Constants.WRAPPER) QueryWrapper<StageTest> queryWrapper);
+
+    /**
+     * 校验考试题目总分
+     */
+    @Select("select sum(case c.exercises_type  when 1 then 3 when  2 then 4 else 0 END) totalScore  from stage_test a join stage_learn b on a.stage_learn_id = b.stage_learn_id join exercises_info c on c.exercises_num = b.exercises_num where a.stage_num = #{stageNum}")
+    Integer publishStageInfo(Integer stageNum);
 }

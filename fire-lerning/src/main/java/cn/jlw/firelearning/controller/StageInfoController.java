@@ -8,7 +8,6 @@ import cn.jlw.firelearning.model.dto.StageInfoEditDTO;
 import cn.jlw.firelearning.model.dto.StageInfoListDTO;
 import cn.jlw.firelearning.model.vo.StageInfoListVO;
 import cn.jlw.firelearning.service.StageInfoService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +32,7 @@ import java.util.List;
 @RequestMapping("/stage/info")
 public class StageInfoController {
     private final StageInfoService stageInfoService;
+
     /**
      * 创建阶段
      */
@@ -70,6 +70,16 @@ public class StageInfoController {
     public LeResponse<?> deleteStageInfo(@Valid @RequestBody LeRequest<Integer> leRequest) {
         Integer stageNum = leRequest.getContent();
         stageInfoService.deleteStageInfo(stageNum);
+        return LeResponse.succ();
+    }
+
+    /**
+     * 发布阶段
+     */
+    @PostMapping("/publish")
+    public LeResponse<?> publishStageInfo(@Valid @RequestBody LeRequest<Integer> leRequest) {
+        Integer stageNum = leRequest.getContent();
+        stageInfoService.publishStageInfo(stageNum);
         return LeResponse.succ();
     }
 }

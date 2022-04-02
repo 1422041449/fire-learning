@@ -1,4 +1,9 @@
-import { addStageInfo, deleteStageInfo, editStageInfo, listStageInfo,publishStage } from '@/api/stage'
+import {
+  addStageTest,
+  deleteStageTest,
+  editStageTest,
+  listStageTest,
+} from '@/api/stageTest'
 
 // const getDefaultState = () => {
 //   return {
@@ -13,53 +18,42 @@ import { addStageInfo, deleteStageInfo, editStageInfo, listStageInfo,publishStag
 // const state = getDefaultState()
 
 const actions = {
-  addStageInfo({}, data) {
+  addStageTest({}, data) {
     return new Promise((resolve, reject) => {
-      addStageInfo(data).then(res => {
+      addStageTest(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
       })
     })
   },
-  listStageInfo({}, data) {
+  listStageTest({}, data) {
     return new Promise((resolve, reject) => {
-      listStageInfo(data).then(res => {
+      listStageTest(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
       })
     })
   },
-  editStageInfo({}, data) {
+  editStageTest({}, data) {
     return new Promise((resolve, reject) => {
-      editStageInfo(data).then(res => {
+      editStageTest(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
       })
     })
   },
-  deleteStageInfo({}, data) {
+  deleteStageTest({}, data) {
     return new Promise((resolve, reject) => {
-      deleteStageInfo(data).then(res => {
+      deleteStageTest(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
       })
     })
   },
-
-  publishStage({}, data) {
-    return new Promise((resolve, reject) => {
-      publishStage(data).then(res => {
-        resolve(res)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
 
 
 }

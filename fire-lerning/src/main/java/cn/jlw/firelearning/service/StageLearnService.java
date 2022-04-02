@@ -39,4 +39,8 @@ public interface StageLearnService extends IService<StageLearn> {
      * 删除阶段学习题
      */
     void deleteStageLearn(StageLearnDeleteDTO content);
+    /**
+     * 获取阶段学习题中阶段考试题未选择的题目
+     */
+    List<ListStageLearnExercisesVO> listStageTestExercises(Integer stageNum);
 }

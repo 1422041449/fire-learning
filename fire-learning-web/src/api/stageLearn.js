@@ -60,3 +60,16 @@ export function deleteStageLearn(data) {
     data: obj
   })
 }
+
+//获取阶段学习题中阶段考试题未选择的题目
+export function listStageTestExercises(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/stage/learn/list/stageTest/exercises',
+    method: 'post',
+    data: obj
+  })
+}

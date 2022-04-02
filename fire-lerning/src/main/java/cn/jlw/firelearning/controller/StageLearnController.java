@@ -74,4 +74,14 @@ public class StageLearnController {
         stageLearnService.deleteStageLearn(content);
         return LeResponse.succ();
     }
+
+    /**
+     * 获取阶段学习题中阶段考试题未选择的题目
+     */
+    @PostMapping("/list/stageTest/exercises")
+    public LeResponse<List<ListStageLearnExercisesVO>> listStageTestExercises(@Valid @RequestBody LeRequest<Integer> leRequest) {
+        Integer stageNum = leRequest.getContent();
+        List<ListStageLearnExercisesVO> resultList = stageLearnService.listStageTestExercises(stageNum);
+        return LeResponse.succ(resultList);
+    }
 }

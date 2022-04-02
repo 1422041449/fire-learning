@@ -101,7 +101,8 @@
             <el-button
               type="success"
               size="small"
-              @click="add(row, 'update')"
+              @click="publishStage(row)"
+              v-if="row.ifPublish == 2"
             >
               发布
             </el-button>
@@ -115,7 +116,7 @@
             <el-button
               type="warning"
               size="small"
-              @click="add(row, 'update')"
+              @click="routerStageTest(row)"
             >
               阶段考试题
             </el-button>
@@ -267,11 +268,38 @@
           }
         })
       },
-      //跳转阶段学习页面
-      routerStageLearn(row){
-        this.$router.push({ path: 'stageLearn', query: { stageInfo: JSON.stringify(row)} })
-      }
 
+      /**
+       * 功能
+       * */
+      //跳转阶段学习页面
+      routerStageLearn(row) {
+        this.$router.push({ path: 'stageLearn', query: { stageInfo: JSON.stringify(row) } })
+      },
+      //跳转阶段考试页面
+      routerStageTest(row) {
+        this.$router.push({ path: 'stageTest', query: { stageInfo: JSON.stringify(row) } })
+      },
+
+      /**
+       * 发布阶段学习
+       * */
+      async publishStage(row) {
+        await this.$confirm('是否发布阶段学习?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        await this.$store.dispatch(
+          `stage/publishStage`,
+          row.stageNum
+        )
+        this.$message({
+          type: 'success',
+          message: '发布成功!'
+        })
+        this.getData()
+      }
     },
 
     /*数据*/

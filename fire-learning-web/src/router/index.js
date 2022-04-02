@@ -211,7 +211,6 @@ export const asyncRouterMap = [
   {
     path: '/stageMgr',
     component: Layout,
-    meta: { title: '阶段学习', icon: 'form', role: ['admin'] },
     children: [
       {
         path: 'stageMgr',
@@ -225,7 +224,14 @@ export const asyncRouterMap = [
         component: () => import('@/views/admin/stage/StageLearn'),
         meta: { title: '阶段学习题', icon: 'form', role: ['admin'] },
         hidden:true
-      }
+      },
+      {
+        path: 'stageTest',
+        name: 'stageTest',
+        component: () => import('@/views/admin/stage/StageTest'),
+        meta: { title: '阶段考试题', icon: 'form', role: ['admin'] },
+        hidden:true
+      },
     ]
   },
 

@@ -1,4 +1,4 @@
-import { addStageLearn, deleteStageLearn, editStageLearn, listStageLearn } from '@/api/stageLearn'
+import { addStageLearn, deleteStageLearn, editStageLearn, listStageLearn,listStageTestExercises } from '@/api/stageLearn'
 
 // const getDefaultState = () => {
 //   return {
@@ -43,6 +43,15 @@ const actions = {
   deleteStageLearn({}, data) {
     return new Promise((resolve, reject) => {
       deleteStageLearn(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  listStageTestExercises({}, data) {
+    return new Promise((resolve, reject) => {
+      listStageTestExercises(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
