@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -31,4 +32,9 @@ public class StageTestAddDTO implements Serializable {
      * 阶段号
      */
     private Integer stageNum;
+    /**
+     * 题型
+     */
+    @NotNull(message = "题型不能为空!")
+    private Integer exercisesType;
 }

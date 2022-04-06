@@ -2,6 +2,7 @@ package cn.jlw.firelearning.model.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -29,6 +30,7 @@ public class StageTestEditDTO implements Serializable {
     /**
      * 题目类型
      */
+    @NotNull(message = "题型不能为空！")
     private Integer exercisesType;
 
     /**

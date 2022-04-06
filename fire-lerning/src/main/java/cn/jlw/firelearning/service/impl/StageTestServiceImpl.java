@@ -15,6 +15,7 @@ import cn.jlw.firelearning.model.dto.StageTestEditDTO;
 import cn.jlw.firelearning.model.dto.StageTestListDTO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
 import cn.jlw.firelearning.model.vo.StageTestListVO;
+import cn.jlw.firelearning.service.StageInfoService;
 import cn.jlw.firelearning.service.StageTestService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -37,9 +38,12 @@ import java.util.List;
 public class StageTestServiceImpl extends ServiceImpl<StageTestMapper, StageTest> implements StageTestService {
     private final ExercisesOptionMapper exercisesOptionMapper;
     private final StageInfoMapper stageInfoMapper;
+    private final StageInfoService stageInfoService;
 
     @Override
     public void addStageTest(StageTestAddDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //校验是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageTest.class)
                 .eq(StageTest::getStageLearnId, content.getStageLearnId())
@@ -47,22 +51,25 @@ public class StageTestServiceImpl extends ServiceImpl<StageTestMapper, StageTest
         if (check > 0) {
             throw new LeException("题目已存在");
         }
-        //校验单选数量20题
-        QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("c.exercises_type", 1)
-                .eq("a.stage_num", content.getStageNum());
-        Integer checkOne = baseMapper.checkDanxuanNum(queryWrapper);
-        if (checkOne >= 20) {
-            throw new LeException("单选题已满");
-        }
 
-        //校验多选题数量10题
-        queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("c.exercises_type", 2)
-                .eq("a.stage_num", content.getStageNum());
-        Integer checkTwo = baseMapper.checkDanxuanNum(queryWrapper);
-        if (checkTwo >= 10) {
-            throw new LeException("多选题已满");
+        if (content.getExercisesType() == 1) {
+            //校验单选数量20题
+            QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("c.exercises_type", 1)
+                    .eq("a.stage_num", content.getStageNum());
+            Integer checkOne = baseMapper.checkDanxuanNum(queryWrapper);
+            if (checkOne >= 20) {
+                throw new LeException("单选题已满");
+            }
+        } else {
+            //校验多选题数量10题
+            QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("c.exercises_type", 2)
+                    .eq("a.stage_num", content.getStageNum());
+            Integer checkTwo = baseMapper.checkDanxuanNum(queryWrapper);
+            if (checkTwo >= 10) {
+                throw new LeException("多选题已满");
+            }
         }
 
         StageTest stageTest = new StageTest();
@@ -91,6 +98,8 @@ public class StageTestServiceImpl extends ServiceImpl<StageTestMapper, StageTest
 
     @Override
     public void editStageTest(StageTestEditDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //校验是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageTest.class)
                 .eq(StageTest::getStageLearnId, content.getStageLearnId())
@@ -99,22 +108,24 @@ public class StageTestServiceImpl extends ServiceImpl<StageTestMapper, StageTest
         if (check > 0) {
             throw new LeException("题目已存在");
         }
-        //校验单选数量20题
-        QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("c.exercises_type", 1)
-                .eq("a.stage_num", content.getStageNum());
-        Integer checkOne = baseMapper.checkDanxuanNum(queryWrapper);
-        if (checkOne >= 20 && content.getExercisesType() == 1) {
-            throw new LeException("单选题已满");
-        }
-
-        //校验多选题数量10题
-        queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("c.exercises_type", 2)
-                .eq("a.stage_num", content.getStageNum());
-        Integer checkTwo = baseMapper.checkDanxuanNum(queryWrapper);
-        if (checkTwo >= 10 && content.getExercisesType() == 2) {
-            throw new LeException("多选题已满");
+        if (content.getExercisesType() == 1) {
+            //校验单选数量20题
+            QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("c.exercises_type", 1)
+                    .eq("a.stage_num", content.getStageNum());
+            Integer checkOne = baseMapper.checkDanxuanNum(queryWrapper);
+            if (checkOne >= 20) {
+                throw new LeException("单选题已满");
+            }
+        } else {
+            //校验多选题数量10题
+            QueryWrapper<StageTest> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("c.exercises_type", 2)
+                    .eq("a.stage_num", content.getStageNum());
+            Integer checkTwo = baseMapper.checkDanxuanNum(queryWrapper);
+            if (checkTwo >= 10) {
+                throw new LeException("多选题已满");
+            }
         }
 
         baseMapper.update(null, Wrappers.lambdaUpdate(StageTest.class)
@@ -124,6 +135,8 @@ public class StageTestServiceImpl extends ServiceImpl<StageTestMapper, StageTest
 
     @Override
     public void deleteStageTest(StageTestDeleteDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //校验阶段是否发布，校验题目是否在考试中出现
         StageInfo stageInfo = stageInfoMapper.selectOne(Wrappers.lambdaQuery(StageInfo.class)
                 .eq(StageInfo::getStageNum, content.getStageNum()));

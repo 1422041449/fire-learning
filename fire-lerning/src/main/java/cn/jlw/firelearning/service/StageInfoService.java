@@ -44,4 +44,9 @@ public interface StageInfoService extends IService<StageInfo> {
      * 发布阶段
      */
     void publishStageInfo(Integer stageNum);
+
+    /**
+     * 校验已发布的阶段，抛出异常
+     */
+    void checkPublish(Integer stageNum);
 }

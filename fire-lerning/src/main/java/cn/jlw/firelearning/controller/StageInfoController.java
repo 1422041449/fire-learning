@@ -82,4 +82,5 @@ public class StageInfoController {
         stageInfoService.publishStageInfo(stageNum);
         return LeResponse.succ();
     }
+
 }

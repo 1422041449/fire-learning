@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -38,6 +39,9 @@ public class ExercisesInfo implements Serializable {
      * 题目类型(1单选2多选)
      */
     private String exercisesType;
-
+    /**
+     * 创建时间
+     */
+    private LocalDateTime crtime;
 
 }

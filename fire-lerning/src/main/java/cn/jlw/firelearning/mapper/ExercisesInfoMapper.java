@@ -23,7 +23,7 @@ import java.util.List;
 public interface ExercisesInfoMapper extends BaseMapper<ExercisesInfo> {
 
     //获取题目信息
-    @Select("select * from exercises_info ${ew.customSqlSegment} order by exercises_type")
+    @Select("select * from exercises_info ${ew.customSqlSegment} order by exercises_type,crtime desc")
     List<ExercisesInfoListVO> listExercisesInfo(@Param(Constants.WRAPPER) LambdaQueryWrapper<ExercisesInfo> lambdaQueryWrapper);
 
     //获取阶段学习未被绑定题目信息

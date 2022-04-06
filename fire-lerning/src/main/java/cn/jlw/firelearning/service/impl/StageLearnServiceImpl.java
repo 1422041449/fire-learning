@@ -18,6 +18,7 @@ import cn.jlw.firelearning.model.dto.StageLearnListDTO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
 import cn.jlw.firelearning.model.vo.ListStageLearnExercisesVO;
 import cn.jlw.firelearning.model.vo.StageLearnListVO;
+import cn.jlw.firelearning.service.StageInfoService;
 import cn.jlw.firelearning.service.StageLearnService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -41,9 +42,12 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
     private final StageInfoMapper stageInfoMapper;
     private final StageTestMapper stageTestMapper;
     private final ExercisesOptionMapper exercisesOptionMapper;
+    private final StageInfoService stageInfoService;
 
     @Override
     public void addStageLearn(StageLearnAddDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //检验题目是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
                 .eq(StageLearn::getStageNum, content.getStageNum())
@@ -58,6 +62,7 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
 
     @Override
     public List<StageLearnListVO> listStageLearn(StageLearnListDTO content) {
+
         QueryWrapper<StageLearn> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("a.stage_num", content.getStageNum());
         if (StrUtil.isNotBlank(content.getExercisesTitle())) {
@@ -77,6 +82,8 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
 
     @Override
     public void editStageLearn(StageLearnEditDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //检验题目是否存在
         Integer check = baseMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
                 .eq(StageLearn::getStageNum, content.getStageNum())
@@ -94,6 +101,8 @@ public class StageLearnServiceImpl extends ServiceImpl<StageLearnMapper, StageLe
 
     @Override
     public void deleteStageLearn(StageLearnDeleteDTO content) {
+        stageInfoService.checkPublish(content.getStageNum());
+
         //校验阶段是否发布，校验题目是否在考试中出现
         StageInfo stageInfo = stageInfoMapper.selectOne(Wrappers.lambdaQuery(StageInfo.class)
                 .eq(StageInfo::getStageNum, content.getStageNum()));

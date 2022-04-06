@@ -127,12 +127,12 @@
         label-width="100px"
       >
         <el-form-item label="题目">
-          <el-select v-model="editdialog.data.stageLearnId" placeholder="选择题目" filterable>
+          <el-select v-model="editdialog.data.stageLearnInfo" placeholder="选择题目" filterable>
             <el-option
               v-for="item in allExercises"
-              :key="item.stageLearnId"
+              :key="item.stageLearnId+'_'+item.exercisesType"
               :label="item.exercisesTypeName+'_'+item.exercisesTitle"
-              :value="item.stageLearnId">
+              :value="item.stageLearnId+'_'+item.exercisesType">
             </el-option>
           </el-select>
         </el-form-item>
@@ -192,7 +192,9 @@
             console.log('编辑框内容：' + this.rightList)
             let object = {}
             object.stageNum = this.stageInfo.stageNum
-            object.stageLearnId = this.editdialog.data.stageLearnId
+            let splitArray = this.editdialog.data.stageLearnInfo.split('_')
+            object.stageLearnId =splitArray[0]
+            object.exercisesType = splitArray[1]
             console.log('入参---：', JSON.stringify(object))
             await this.$store.dispatch(
               `stageTest/addStageTest`,
@@ -240,6 +242,9 @@
             console.log('调用修改接口入参--：{}', this.editdialog.data)
             let object = this.editdialog.data
             object.stageNum = this.stageInfo.stageNum
+            let splitArray = this.editdialog.data.stageLearnInfo.split('_')
+            object.stageLearnId =splitArray[0]
+            object.exercisesType = splitArray[1]
             console.log('调用修改接口入参--：{}', object)
             await this.$store.dispatch(
               `stageTest/editStageTest`,
