@@ -156,32 +156,9 @@ export const constantRouterMap = [
  */
 export const asyncRouterMap = [
 
-  {
-    path: '/consult',
-    component: Layout,
-    children: [
-      {
-        path: 'consult',
-        name: 'Consult',
-        component: () => import('@/views/user/consult/index'),
-        meta: { title: '咨询', icon: 'table', role: ['user'] }
-      }
-    ]
-  },
-
-  {
-    path: '/firelearning',
-    component: Layout,
-    children: [
-      {
-        path: 'firelearning',
-        name: 'Firelearning',
-        component: () => import('@/views/user/firelearning/index'),
-        meta: { title: '消防学习', icon: 'table', role: ['user'] }
-      }
-    ]
-  },
-
+  /**
+   * 管理员
+   */
   {
     path: '/userMgr',
     component: Layout,
@@ -223,15 +200,31 @@ export const asyncRouterMap = [
         name: 'stageLearn',
         component: () => import('@/views/admin/stage/StageLearn'),
         meta: { title: '阶段学习题', icon: 'form', role: ['admin'] },
-        hidden:true
+        hidden: true
       },
       {
         path: 'stageTest',
         name: 'stageTest',
         component: () => import('@/views/admin/stage/StageTest'),
         meta: { title: '阶段考试题', icon: 'form', role: ['admin'] },
-        hidden:true
-      },
+        hidden: true
+      }
+    ]
+  },
+
+  /**
+   * 用户
+   */
+  {
+    path: '/userStageLearn',
+    component: Layout,
+    children: [
+      {
+        path: 'userStageLearn',
+        name: 'userStageLearn',
+        component: () => import('@/views/user/stageLearnAndTest/UserStageLearn'),
+        meta: { title: '阶段学习', icon: 'table', role: ['user'] }
+      }
     ]
   },
 

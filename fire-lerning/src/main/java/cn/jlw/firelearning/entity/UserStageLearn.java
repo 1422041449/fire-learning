@@ -44,5 +44,10 @@ public class UserStageLearn implements Serializable {
      */
     private String userAnswer;
 
+    /**
+     * 阶段号
+     */
+    private Integer stageNum;
+
 
 }

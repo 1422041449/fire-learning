@@ -1,5 +1,5 @@
 import { getInfo, login, logout, register, listUserInfo, deleteUserInfo ,updateUserInfo} from '@/api/userinfo'
-import { getToken, removeToken, setToken } from '@/utils/auth'
+import { getToken, removeToken, setToken, setUsername } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -32,6 +32,8 @@ const mutations = {
   },
   SET_USERNAME: (state, username) => {
     state.username = username
+    //用户名存储cookies
+    setUsername(username)
   }
 }
 

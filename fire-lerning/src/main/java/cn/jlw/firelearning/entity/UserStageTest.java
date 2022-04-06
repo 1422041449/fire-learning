@@ -44,5 +44,8 @@ public class UserStageTest implements Serializable {
      */
     private String userAnswer;
 
-
+    /**
+     * 阶段号
+     */
+    private Integer stageNum;
 }

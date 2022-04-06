@@ -115,12 +115,14 @@ public class StageInfoServiceImpl extends ServiceImpl<StageInfoMapper, StageInfo
                     UserStageLearn userStageLearn = new UserStageLearn();
                     userStageLearn.setUsername(username);
                     userStageLearn.setStageLearnId(stageLearn.getStageLearnId());
+                    userStageLearn.setStageNum(stageLearn.getStageNum());
                     userStageLearnList.add(userStageLearn);
                 }
                 for (StageTest stageTest : stageTestList) {
                     UserStageTest userStageTest = new UserStageTest();
                     userStageTest.setUsername(username);
                     userStageTest.setStageTestId(stageTest.getStageTestId());
+                    userStageTest.setStageNum(stageTest.getStageNum());
                     userStageTestList.add(userStageTest);
                 }
             }
