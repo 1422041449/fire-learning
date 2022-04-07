@@ -1,4 +1,4 @@
-import {listStageLearnInfo } from '@/api/userStageLearn'
+import {listStageLearnInfo,listLearnCurrentTest } from '@/api/userStageLearn'
 
 // const getDefaultState = () => {
 //   return {
@@ -22,6 +22,16 @@ const actions = {
       })
     })
   },
+  listLearnCurrentTest({}, data) {
+    return new Promise((resolve, reject) => {
+      listLearnCurrentTest(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
 
 
 }

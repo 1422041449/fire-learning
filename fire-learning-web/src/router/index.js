@@ -224,6 +224,13 @@ export const asyncRouterMap = [
         name: 'userStageLearn',
         component: () => import('@/views/user/stageLearnAndTest/UserStageLearn'),
         meta: { title: '阶段学习', icon: 'table', role: ['user'] }
+      },
+      {
+        path: 'userStageLearnTest',
+        name: 'userStageLearnTest',
+        component: () => import('@/views/user/stageLearnAndTest/UserStageLearnTest'),
+        meta: { title: '阶段学习题目', icon: 'table', role: ['user'] },
+        hidden:true
       }
     ]
   },

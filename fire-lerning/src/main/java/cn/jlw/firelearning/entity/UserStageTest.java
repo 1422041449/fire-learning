@@ -40,7 +40,7 @@ public class UserStageTest implements Serializable {
     private Integer stageTestId;
 
     /**
-     * 用户答案
+     * 用户答案 A-B
      */
     private String userAnswer;
 

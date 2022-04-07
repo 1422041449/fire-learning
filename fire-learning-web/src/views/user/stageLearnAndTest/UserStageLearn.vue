@@ -51,7 +51,7 @@
             <el-button
               type="primary"
               size="small"
-              @click="add(row, 'update')"
+              @click="routerStageLearn(row)"
             >
               学习
             </el-button>
@@ -102,7 +102,7 @@
   export default {
     /*初始化执行方法*/
     async created() {
-      this.username = getUsername();
+      this.username = getUsername()
       this.getData()
     },
 
@@ -118,7 +118,7 @@
           }
         })
         object.username = this.username
-        console.log("查询--入参：{}",object)
+        console.log('查询--入参：{}', object)
         let res = await this.$store.dispatch(
           'userStageLearn/listStageLearnInfo',
           object
@@ -163,7 +163,7 @@
         })
         let object = Object.assign({}, row)
         object.stageNum = this.stageInfo.stageNum
-        console.log("删除---入参：",object)
+        console.log('删除---入参：', object)
         let res = await this.$store.dispatch(
           `stageLearn/deleteStageLearn`,
           object
@@ -250,6 +250,13 @@
           }
         }
         return res
+      },
+
+      /**
+       * 跳转阶段学习试卷页面
+       * */
+      routerStageLearn(row) {
+        this.$router.push({ path: 'userStageLearnTest', query: { stageInfo: JSON.stringify(row) } })
       }
 
     },
@@ -275,7 +282,7 @@
         ],
         stageInfo: {},
         allExercises: [],
-        username:''
+        username: ''
       }
     }
 

@@ -3,7 +3,9 @@ package cn.jlw.firelearning.controller;
 
 import cn.jlw.firelearning.model.LeRequest;
 import cn.jlw.firelearning.model.LeResponse;
+import cn.jlw.firelearning.model.dto.ListLearnCurrentTestDTO;
 import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
+import cn.jlw.firelearning.model.vo.ListLearnCurrentTestVO;
 import cn.jlw.firelearning.model.vo.ListStageLearnInfoVO;
 import cn.jlw.firelearning.service.UserStageLearnService;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +41,16 @@ public class UserStageLearnController {
         List<ListStageLearnInfoVO> resultList = userStageLearnService.listStageLearnInfo(content);
         return LeResponse.succ(resultList);
     }
+
+    /**
+     * 查询当前用户的当前阶段题目
+     */
+    @PostMapping("/list/learn/current/test")
+    public LeResponse<List<ListLearnCurrentTestVO>> listLearnCurrentTest(@RequestBody LeRequest<ListLearnCurrentTestDTO> leRequest) {
+        ListLearnCurrentTestDTO content = leRequest.getContent();
+        List<ListLearnCurrentTestVO> resultList = userStageLearnService.listLearnCurrentTest(content);
+        return LeResponse.succ(resultList);
+    }
+
+
 }

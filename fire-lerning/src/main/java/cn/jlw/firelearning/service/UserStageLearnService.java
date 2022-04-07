@@ -2,7 +2,9 @@ package cn.jlw.firelearning.service;
 
 
 import cn.jlw.firelearning.entity.UserStageLearn;
+import cn.jlw.firelearning.model.dto.ListLearnCurrentTestDTO;
 import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
+import cn.jlw.firelearning.model.vo.ListLearnCurrentTestVO;
 import cn.jlw.firelearning.model.vo.ListStageLearnInfoVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,6 +23,11 @@ public interface UserStageLearnService extends IService<UserStageLearn> {
     /**
      * 查询当前用户所有阶段进度
      */
-    List<ListStageLearnInfoVO>  listStageLearnInfo(ListStageLearnInfoDTO content);
+    List<ListStageLearnInfoVO> listStageLearnInfo(ListStageLearnInfoDTO content);
+
+    /**
+     * 查询当前用户的当前阶段题目
+     */
+    List<ListLearnCurrentTestVO> listLearnCurrentTest(ListLearnCurrentTestDTO content);
 
 }

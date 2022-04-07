@@ -9,7 +9,7 @@ let dataObj = {
   sign: 'dafdsf'
 }
 
-//查询题目
+//查询当前用户阶段情况
 export function listStageLearnInfo(data) {
   let obj = JSON.parse(JSON.stringify(dataObj))
   if (data) {
@@ -17,6 +17,19 @@ export function listStageLearnInfo(data) {
   }
   return request({
     url: '/user/stage/learn/list/stage/info',
+    method: 'post',
+    data: obj
+  })
+}
+
+//查询当前用户当前阶段学习题目
+export function listLearnCurrentTest(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/user/stage/learn/list/learn/current/test',
     method: 'post',
     data: obj
   })
