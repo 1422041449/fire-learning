@@ -15,7 +15,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 minio:
-  endpoint: http://localhost:9000
+  endpoint: http://122.112.219.86:58060
   accessKey: minioadmin
   secretKey: minioadmin
   bucketName: fire

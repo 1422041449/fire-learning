@@ -1,11 +1,15 @@
 package cn.jlw.firelearning.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import cn.jlw.firelearning.entity.UserInfo;
+import cn.jlw.firelearning.entity.*;
 import cn.jlw.firelearning.exception.LeException;
+import cn.jlw.firelearning.mapper.StageInfoMapper;
+import cn.jlw.firelearning.mapper.StageLearnMapper;
+import cn.jlw.firelearning.mapper.StageTestMapper;
 import cn.jlw.firelearning.mapper.UserInfoMapper;
 import cn.jlw.firelearning.model.LeResponse;
 import cn.jlw.firelearning.model.dto.UserInfoAddDTO;
@@ -13,6 +17,8 @@ import cn.jlw.firelearning.model.dto.UserInfoListDTO;
 import cn.jlw.firelearning.model.dto.UserInfoLoginDTO;
 import cn.jlw.firelearning.service.TokenService;
 import cn.jlw.firelearning.service.UserInfoService;
+import cn.jlw.firelearning.service.UserStageLearnService;
+import cn.jlw.firelearning.service.UserStageTestService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -21,7 +27,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -35,6 +44,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
     private final TokenService tokenService;
+    private final StageLearnMapper stageLearnMapper;
+    private final StageTestMapper stageTestMapper;
+    private final UserStageLearnService userStageLearnService;
+    private final UserStageTestService userStageTestService;
+    private final StageInfoMapper stageInfoMapper;
 
     @Override
     public LeResponse<?> login(UserInfoLoginDTO content) {
@@ -87,6 +101,36 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setUsername(content.getPhone());
         userInfo.setRole("user");
         baseMapper.insert(userInfo);
+
+        //异步-注册用户的同时会生成用户学习阶段题和用户阶段考试题
+        ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(8, 16);
+        threadPoolExecutor.execute(() -> {
+            List<UserStageLearn> userStageLearnList = new ArrayList<>();
+            List<UserStageTest> userStageTestList = new ArrayList<>();
+            //获取当前所有已发布阶段
+            List<StageInfo> stageInfoList = stageInfoMapper.selectList(Wrappers.lambdaQuery(StageInfo.class)
+                    .eq(StageInfo::getIfPublish, 1)
+                    .select(StageInfo::getStageNum));
+            List<Integer> stageNumList = stageInfoList.stream().map(StageInfo::getStageNum).collect(Collectors.toList());
+            List<StageLearn> stageLearnList = stageLearnMapper.selectList(Wrappers.lambdaQuery(StageLearn.class)
+                    .in(StageLearn::getStageNum, stageNumList));
+            for (StageLearn stageLearn : stageLearnList) {
+                UserStageLearn userStageLearn = new UserStageLearn();
+                BeanUtil.copyProperties(stageLearn, userStageLearn);
+                userStageLearn.setUsername(userInfo.getUsername());
+                userStageLearnList.add(userStageLearn);
+            }
+            List<StageTest> stageTestList = stageTestMapper.selectList(Wrappers.lambdaQuery(StageTest.class)
+                    .in(StageTest::getStageNum, stageNumList));
+            for (StageTest stageTest : stageTestList) {
+                UserStageTest userStageTest = new UserStageTest();
+                BeanUtil.copyProperties(stageTest, userStageTest);
+                userStageTest.setUsername(userInfo.getUsername());
+                userStageTestList.add(userStageTest);
+            }
+            userStageLearnService.saveBatch(userStageLearnList);
+            userStageTestService.saveBatch(userStageTestList);
+        });
         return LeResponse.succ();
     }
 

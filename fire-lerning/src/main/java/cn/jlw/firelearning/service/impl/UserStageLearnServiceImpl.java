@@ -8,6 +8,7 @@ import cn.jlw.firelearning.entity.UserStageLearn;
 import cn.jlw.firelearning.mapper.ExercisesOptionMapper;
 import cn.jlw.firelearning.mapper.StageInfoMapper;
 import cn.jlw.firelearning.mapper.UserStageLearnMapper;
+import cn.jlw.firelearning.model.dto.CommitLearnTestDTO;
 import cn.jlw.firelearning.model.dto.ListLearnCurrentTestDTO;
 import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
 import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
@@ -53,7 +54,7 @@ public class UserStageLearnServiceImpl extends ServiceImpl<UserStageLearnMapper,
                     .eq(UserStageLearn::getStageNum, stageInfo.getStageNum())
                     .eq(UserStageLearn::getUsername, content.getUsername())
                     .isNotNull(UserStageLearn::getUserAnswer));
-            BigDecimal progress = new BigDecimal(notNullNum).divide(new BigDecimal(30), 2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal progress = new BigDecimal(notNullNum).divide(new BigDecimal(30), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
             result.setProgress(progress);
             resultList.add(result);
         }
@@ -103,4 +104,11 @@ public class UserStageLearnServiceImpl extends ServiceImpl<UserStageLearnMapper,
         }
         return resultList;
     }
+
+    @Override
+    public void commitLearnTest(CommitLearnTestDTO content) {
+        baseMapper.update(null,Wrappers.lambdaUpdate(UserStageLearn.class))
+    }
+
+
 }

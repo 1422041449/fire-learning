@@ -3,6 +3,7 @@ package cn.jlw.firelearning.controller;
 
 import cn.jlw.firelearning.model.LeRequest;
 import cn.jlw.firelearning.model.LeResponse;
+import cn.jlw.firelearning.model.dto.CommitLearnTestDTO;
 import cn.jlw.firelearning.model.dto.ListLearnCurrentTestDTO;
 import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
 import cn.jlw.firelearning.model.vo.ListLearnCurrentTestVO;
@@ -50,6 +51,16 @@ public class UserStageLearnController {
         ListLearnCurrentTestDTO content = leRequest.getContent();
         List<ListLearnCurrentTestVO> resultList = userStageLearnService.listLearnCurrentTest(content);
         return LeResponse.succ(resultList);
+    }
+
+    /**
+     * 提交学习题目
+     */
+    @PostMapping("/commit/learn/test")
+    public LeResponse<?> commitLearnTest(@RequestBody LeRequest<CommitLearnTestDTO> leRequest) {
+        CommitLearnTestDTO content = leRequest.getContent();
+        userStageLearnService.commitLearnTest(content);
+        return LeResponse.succ();
     }
 
 
