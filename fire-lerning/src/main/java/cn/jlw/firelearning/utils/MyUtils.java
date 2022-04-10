@@ -49,15 +49,43 @@ public class MyUtils {
         return res;
     }
 
+    /**
+     * 判断A字符串是等于B字符串，还是包含B，还是什么都不是
+     * 1是等于,2不是,3包含
+     */
+    public static int containStr(String source, String target) {
+        int res = 2;
+        //将字符串转为字符数组
+        char[] sourceChar = source.toCharArray();
+        char[] targetChar = target.toCharArray();
+        //对字符串进行字符排序
+        Arrays.sort(sourceChar);
+        Arrays.sort(targetChar);
+        String sourceStr = "";
+        String targetStr = "";
+        for (char c : sourceChar) {
+            sourceStr += c;
+        }
+        for (char c : targetChar) {
+            targetStr += c;
+        }
+        if (sourceStr.equals(targetStr)) {
+            res = 1;
+        } else if (sourceStr.contains(targetStr)) {
+            res = 3;
+        }
+        return res;
+    }
+
 
     /**
      * 测试main方法
      */
     public static void main(String[] args) {
-        String a = "AC";
-        String b = "A";
-        boolean b1 = compareTwoStrChar(a, b);
-        System.out.println(b1);
+        String a = "BA";
+        String b = "C";
+        int i = containStr(a, b);
+        System.out.println(i);
     }
 
 }

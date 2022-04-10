@@ -48,4 +48,9 @@ public class UserStageTest implements Serializable {
      * 阶段号
      */
     private Integer stageNum;
+
+    /**
+     *
+     */
+    private Integer answerResult;
 }

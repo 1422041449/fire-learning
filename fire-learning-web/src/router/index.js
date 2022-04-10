@@ -75,8 +75,36 @@ export const asyncRouterMap = [
         name: 'userStageLearnTest',
         component: () => import('@/views/user/stageLearnAndTest/UserStageLearnTest'),
         meta: { title: '阶段学习题目', icon: 'table', role: ['user'] },
-        hidden:true
+        hidden: true
       }
+    ]
+  },
+
+  {
+    path: '/userStageTest',
+    component: Layout,
+    children: [
+      {
+        path: 'userStageTest',
+        name: 'userStageTest',
+        component: () => import('@/views/user/stageLearnAndTest/UserStageTest'),
+        meta: { title: '阶段考试', icon: 'table', role: ['user'] }
+      },
+      {
+        path: 'userStageTestTest',
+        name: 'userStageTestTest',
+        component: () => import('@/views/user/stageLearnAndTest/UserStageTestTest'),
+        meta: { title: '阶段考试题目', icon: 'table', role: ['user'] },
+        hidden: true
+      },
+      {
+        path: 'userStageTestTestDetail',
+        name: 'userStageTestTestDetail',
+        component: () => import('@/views/user/stageLearnAndTest/userStageTestTestDetail'),
+        meta: { title: '阶段考试题目详情', icon: 'table', role: ['user'] },
+        hidden: true
+      }
+
     ]
   },
 
@@ -136,7 +164,11 @@ export const asyncRouterMap = [
     ]
   },
 
-
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+    hidden: true
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
