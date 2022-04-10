@@ -34,3 +34,16 @@ export function listLearnCurrentTest(data) {
     data: obj
   })
 }
+
+//提交阶段学习题答案
+export function commitLearnTest(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/user/stage/learn/commit/learn/test',
+    method: 'post',
+    data: obj
+  })
+}

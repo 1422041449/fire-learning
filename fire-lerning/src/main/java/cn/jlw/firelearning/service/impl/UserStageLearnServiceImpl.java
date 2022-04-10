@@ -101,13 +101,23 @@ public class UserStageLearnServiceImpl extends ServiceImpl<UserStageLearnMapper,
                 listLearnCurrentTestVO.setIfAnswer(1);
             }
             listLearnCurrentTestVO.setRightAnswer(rightAnswer);
+
+            //比较回答是否是正确答案
+            if (StrUtil.isNotBlank(userAnswer) && StrUtil.isNotBlank(rightAnswer)) {
+                String tempAnswer = userAnswer.replace("-", "");
+                if (MyUtils.compareTwoStrChar(tempAnswer, rightAnswer)) {
+                    listLearnCurrentTestVO.setIfAnswerRight(1);
+                }
+            }
         }
         return resultList;
     }
 
     @Override
     public void commitLearnTest(CommitLearnTestDTO content) {
-        baseMapper.update(null,Wrappers.lambdaUpdate(UserStageLearn.class))
+        baseMapper.update(null, Wrappers.lambdaUpdate(UserStageLearn.class)
+                .eq(UserStageLearn::getId, content.getId())
+                .set(UserStageLearn::getUserAnswer, content.getUserAnswer()));
     }
 
 

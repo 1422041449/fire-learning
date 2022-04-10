@@ -42,7 +42,8 @@
           width="200"
           align="center">
           <template slot-scope="{ row }">
-            <span v-if="row.ifAnswer == 1">{{ row.rightAnswer }}</span>
+            <span v-if="row.ifAnswer == 1 && row.ifAnswerRight == 2" style="color: red">{{ row.rightAnswer }}</span>
+            <span v-else-if="row.ifAnswer == 1 && row.ifAnswerRight == 1">{{ row.rightAnswer }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -334,9 +335,35 @@
         })
       },
       //提交答案
-      commitAnswer(row){
-        console.log("提交内容:{}",row)
+      async commitAnswer(row) {
+        console.log('提交内容:{}', row)
+        let object = {}
+        object.id = row.id
+        if (row.exercisesType == 1) {
+          object.userAnswer = row.userRadioAnswer
+        } else {
+          let userAnswer = ''
+          for (let i in row.userMultiAnswer) {
+            if (i == row.userMultiAnswer.length - 1) {
+              userAnswer += row.userMultiAnswer[i]
+            } else {
+              userAnswer += row.userMultiAnswer[i] + '-'
+            }
+          }
+          object.userAnswer = userAnswer
+        }
+        console.log('提交答案--入参：', object)
+        await this.$store.dispatch(
+          `userStageLearn/commitLearnTest`,
+          object
+        )
+        this.$message({
+          type: 'success',
+          message: '提交成功!'
+        })
+        this.getData()
       },
+
       /**
        * 错误弹框
        * */

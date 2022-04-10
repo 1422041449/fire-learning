@@ -24,6 +24,9 @@ public class ListLearnCurrentTestVO {
     //是否回答
     private Integer ifAnswer = 2;
 
+    //是否回答正确
+    private Integer ifAnswerRight = 2;
+
     //正确答案
     private String rightAnswer;
 
