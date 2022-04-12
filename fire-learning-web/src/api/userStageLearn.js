@@ -47,3 +47,16 @@ export function commitLearnTest(data) {
     data: obj
   })
 }
+
+//校验阶段学习是否完成;
+export function checkLearnProgress(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/user/stage/learn/check/learn/progress',
+    method: 'post',
+    data: obj
+  })
+}

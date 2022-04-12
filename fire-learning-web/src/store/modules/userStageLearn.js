@@ -1,4 +1,4 @@
-import {listStageLearnInfo,listLearnCurrentTest,commitLearnTest } from '@/api/userStageLearn'
+import {listStageLearnInfo,listLearnCurrentTest,commitLearnTest,checkLearnProgress } from '@/api/userStageLearn'
 
 // const getDefaultState = () => {
 //   return {
@@ -34,6 +34,16 @@ const actions = {
   commitLearnTest({}, data) {
     return new Promise((resolve, reject) => {
       commitLearnTest(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  checkLearnProgress({}, data) {
+    return new Promise((resolve, reject) => {
+      checkLearnProgress(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)

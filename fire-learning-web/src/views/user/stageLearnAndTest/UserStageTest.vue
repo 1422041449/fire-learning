@@ -264,8 +264,17 @@
       /**
        * 跳转阶段学习试卷页面
        * */
-      routerStageTest(row) {
-        this.$router.push({ path: 'userStageTestTest', query: { stageInfo: JSON.stringify(row)} })
+      async routerStageTest(row) {
+        let object = {
+          stageNum:row.stageNum,
+          username:this.username
+        }
+        //校验阶段学习进度是否达到100%
+        await this.$store.dispatch(
+          `userStageLearn/checkLearnProgress`,
+          object
+        )
+        this.$router.push({ path: 'userStageTestTest', query: { stageInfo: JSON.stringify(row) } })
       },
       //跳转阶段考试详情页面
       routerStageTestDetail(row){

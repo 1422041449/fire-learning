@@ -1,6 +1,7 @@
 package cn.jlw.firelearning.controller;
 
 
+import cn.jlw.firelearning.entity.UserStageLearn;
 import cn.jlw.firelearning.model.LeRequest;
 import cn.jlw.firelearning.model.LeResponse;
 import cn.jlw.firelearning.model.dto.CommitLearnTestDTO;
@@ -9,6 +10,7 @@ import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
 import cn.jlw.firelearning.model.vo.ListLearnCurrentTestVO;
 import cn.jlw.firelearning.model.vo.ListStageLearnInfoVO;
 import cn.jlw.firelearning.service.UserStageLearnService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,5 +65,19 @@ public class UserStageLearnController {
         return LeResponse.succ();
     }
 
-
+    /**
+     * 校验阶段学习进度
+     */
+    @PostMapping("/check/learn/progress")
+    public LeResponse<?> checkLearnProgress(@RequestBody LeRequest<ListLearnCurrentTestDTO> leRequest) {
+        ListLearnCurrentTestDTO content = leRequest.getContent();
+        int checkCount = userStageLearnService.count(Wrappers.lambdaQuery(UserStageLearn.class)
+                .eq(UserStageLearn::getUsername, content.getUsername())
+                .eq(UserStageLearn::getStageNum, content.getStageNum())
+                .isNull(UserStageLearn::getUserAnswer));
+        if (checkCount > 0) {
+            return LeResponse.fail("当前阶段学习未完成，请先完成学习!");
+        }
+        return LeResponse.succ();
+    }
 }
