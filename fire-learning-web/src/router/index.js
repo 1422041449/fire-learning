@@ -100,7 +100,7 @@ export const asyncRouterMap = [
       {
         path: 'userStageTestTestDetail',
         name: 'userStageTestTestDetail',
-        component: () => import('@/views/user/stageLearnAndTest/userStageTestTestDetail'),
+        component: () => import('@/views/user/stageLearnAndTest/UserStageTestTestDetail'),
         meta: { title: '阶段考试题目详情', icon: 'table', role: ['user'] },
         hidden: true
       }

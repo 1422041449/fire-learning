@@ -51,7 +51,7 @@
             <el-button
               type="primary"
               size="small"
-              @click="routerStageTest(row,2)"
+              @click="routerStageTest(row)"
               v-if="row.ifFinish == 2"
             >
               考试
@@ -59,7 +59,7 @@
             <el-button
               type="primary"
               size="small"
-              @click="routerStageTest(row,1)"
+              @click="routerStageTestDetail(row)"
               v-else-if="row.ifFinish == 1"
             >
               详情
@@ -264,8 +264,12 @@
       /**
        * 跳转阶段学习试卷页面
        * */
-      routerStageTest(row,ifFinish) {
-        this.$router.push({ path: 'userStageTestTest', query: { stageInfo: JSON.stringify(row),ifFinish:ifFinish } })
+      routerStageTest(row) {
+        this.$router.push({ path: 'userStageTestTest', query: { stageInfo: JSON.stringify(row)} })
+      },
+      //跳转阶段考试详情页面
+      routerStageTestDetail(row){
+        this.$router.push({ path: 'userStageTestTestDetail', query: { stageInfo: JSON.stringify(row) } })
       }
 
     },

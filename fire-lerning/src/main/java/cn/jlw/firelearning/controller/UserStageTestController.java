@@ -65,4 +65,14 @@ public class UserStageTestController {
         userStageTestService.commitTestAnswer(contentList);
         return LeResponse.succ();
     }
+
+    /**
+     * 查询当前用户的当前阶段考试详情
+     */
+    @PostMapping("/list/test/current/test/detail")
+    public LeResponse<List<ListTestCurrentTestVO>> listTestCurrentTestDetail(@RequestBody LeRequest<ListLearnCurrentTestDTO> leRequest) {
+        ListLearnCurrentTestDTO content = leRequest.getContent();
+        List<ListTestCurrentTestVO> resultList = userStageTestService.listTestCurrentTestDetail(content);
+        return LeResponse.succ(resultList);
+    }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-header v-if="this.ifFinish == 1">
+    <el-header>
       <div class="filter-container">
         <h1 align="center">成绩：<span style="color: red">{{this.grade}}</span></h1>
       </div>
@@ -53,14 +53,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-footer style="margin-top: 30px">
-      <div class="filter-container" align="center" v-if="ifFinish == 2">
-        <el-button type="primary"
-                   @click="commitTest(tableData)"
-        >交卷
-        </el-button>
-      </div>
-    </el-footer>
     <!--模态框-->
     <el-dialog
       :title="editdialog.title"
@@ -124,10 +116,10 @@
     /*初始化执行方法*/
     async created() {
       let stageInfo = this.$route.query.stageInfo
-      this.ifFinish = this.$route.query.ifFinish
       console.log('路由携带数据：', stageInfo)
       this.stageInfo = JSON.parse(stageInfo)
       this.username = getUsername()
+      this.grade = this.stageInfo.grade
       this.getData()
     },
 
@@ -145,7 +137,7 @@
         object.username = this.username
         object.stageNum = this.stageInfo.stageNum
         let res = await this.$store.dispatch(
-          'userStageTest/listTestCurrentTest',
+          'userStageTest/listTestCurrentTestDetail',
           object
         )
         console.log('查询返回内容--:' + JSON.stringify(res))

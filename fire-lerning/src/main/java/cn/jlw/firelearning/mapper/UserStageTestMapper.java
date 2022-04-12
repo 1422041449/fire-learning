@@ -29,7 +29,7 @@ public interface UserStageTestMapper extends BaseMapper<UserStageTest> {
     List<UserLearnTestAnswerModel> listUserAnswerRes(@Param(Constants.WRAPPER) QueryWrapper<UserStageTest> queryWrapper);
 
     //查询阶段考试题题目信息
-    @Select("select a.id,a.stage_test_id,a.username,a.answer_result,d.exercises_num,d.exercises_title,d.exercises_type from user_stage_test a " +
+    @Select("select a.id,a.stage_test_id,a.username,a.answer_result,d.exercises_num,d.exercises_title,d.exercises_type,a.user_answer from user_stage_test a " +
             "join stage_test b on a.stage_test_id = b.stage_test_id join stage_learn c on c.stage_learn_id = b.stage_learn_id " +
             "join exercises_info d on d.exercises_num = c.exercises_num ${ew.customSqlSegment}")
     List<ListTestCurrentTestVO> listTestCurrentTest(@Param(Constants.WRAPPER) QueryWrapper<UserStageTest> queryWrapper);

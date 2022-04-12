@@ -2,8 +2,10 @@ package cn.jlw.firelearning.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.jlw.firelearning.entity.ExercisesOption;
 import cn.jlw.firelearning.entity.StageInfo;
+import cn.jlw.firelearning.entity.UserStageLearn;
 import cn.jlw.firelearning.entity.UserStageTest;
 import cn.jlw.firelearning.mapper.ExercisesOptionMapper;
 import cn.jlw.firelearning.mapper.StageInfoMapper;
@@ -12,10 +14,7 @@ import cn.jlw.firelearning.model.dto.CommitTestAnswerDTO;
 import cn.jlw.firelearning.model.dto.ListLearnCurrentTestDTO;
 import cn.jlw.firelearning.model.dto.ListStageLearnInfoDTO;
 import cn.jlw.firelearning.model.model.UserLearnTestAnswerModel;
-import cn.jlw.firelearning.model.vo.ExercisesOptionsListVO;
-import cn.jlw.firelearning.model.vo.ListStageTestInfoVO;
-import cn.jlw.firelearning.model.vo.ListTestCurrentTestOptionsVO;
-import cn.jlw.firelearning.model.vo.ListTestCurrentTestVO;
+import cn.jlw.firelearning.model.vo.*;
 import cn.jlw.firelearning.service.UserStageTestService;
 import cn.jlw.firelearning.utils.MyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -129,5 +128,57 @@ public class UserStageTestServiceImpl extends ServiceImpl<UserStageTestMapper, U
                     .set(UserStageTest::getUserAnswer, content.getUserAnswer())
                     .set(UserStageTest::getAnswerResult, answerResult));
         }
+    }
+
+    @Override
+    public List<ListTestCurrentTestVO> listTestCurrentTestDetail(ListLearnCurrentTestDTO content) {
+        QueryWrapper<UserStageTest> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("a.username", content.getUsername())
+                .eq("a.stage_num", content.getStageNum());
+        List<ListTestCurrentTestVO> resultList = baseMapper.listTestCurrentTest(queryWrapper);
+
+        //处理单选答案和多选答案返回
+        for (ListTestCurrentTestVO listTestCurrentTestVO : resultList) {
+            String userAnswer = listTestCurrentTestVO.getUserAnswer();
+            if (listTestCurrentTestVO.getExercisesType().equals("1")) {
+                listTestCurrentTestVO.setUserRadioAnswer(userAnswer);
+            } else if (listTestCurrentTestVO.getExercisesType().equals("2")) {
+                if (StrUtil.isNotBlank(userAnswer)) {
+                    //拆解答案 多选是A-B
+                    List<String> userMultiAnswer = new ArrayList<>();
+                    String[] split = userAnswer.split("-");
+                    for (String s : split) {
+                        userMultiAnswer.add(s);
+                    }
+                    listTestCurrentTestVO.setUserMultiAnswer(userMultiAnswer);
+                }
+            }
+
+            //获取选项
+            List<ExercisesOptionsListVO> exercisesOptionsListVOS = exercisesOptionMapper.listOptionsByExercisesNum(listTestCurrentTestVO.getExercisesNum());
+            List<ListTestCurrentTestOptionsVO> optionsList = MyUtils.copyList(exercisesOptionsListVOS, ListTestCurrentTestOptionsVO.class);
+            listTestCurrentTestVO.setOptionsList(optionsList);
+
+            //返回正确答案
+            String rightAnswer = "";
+            for (ListTestCurrentTestOptionsVO listTestCurrentTestOptionsVO : optionsList) {
+                if (listTestCurrentTestOptionsVO.getIfRight().equals("1")) {
+                    rightAnswer += listTestCurrentTestOptionsVO.getOptionNum();
+                }
+            }
+            if (StrUtil.isNotBlank(userAnswer)) {
+                listTestCurrentTestVO.setIfAnswer(1);
+            }
+            listTestCurrentTestVO.setRightAnswer(rightAnswer);
+
+            //比较回答是否是正确答案
+            if (StrUtil.isNotBlank(userAnswer) && StrUtil.isNotBlank(rightAnswer)) {
+                String tempAnswer = userAnswer.replace("-", "");
+                if (MyUtils.compareTwoStrChar(tempAnswer, rightAnswer)) {
+                    listTestCurrentTestVO.setIfAnswerRight(1);
+                }
+            }
+        }
+        return resultList;
     }
 }

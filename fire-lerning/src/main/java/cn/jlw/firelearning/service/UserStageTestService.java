@@ -35,4 +35,9 @@ public interface UserStageTestService extends IService<UserStageTest> {
      */
     void commitTestAnswer(List<CommitTestAnswerDTO> contentList);
 
+    /**
+     * 查询当前用户的当前阶段考试详情
+     */
+    List<ListTestCurrentTestVO> listTestCurrentTestDetail(ListLearnCurrentTestDTO content);
+
 }

@@ -46,3 +46,15 @@ export function commitTestAnswer(data) {
     data: obj
   })
 }
+//查询当前用户当前阶段考试详情
+export function listTestCurrentTestDetail(data) {
+  let obj = JSON.parse(JSON.stringify(dataObj))
+  if (data) {
+    obj.content = data
+  }
+  return request({
+    url: '/user/stage/test/list/test/current/test/detail',
+    method: 'post',
+    data: obj
+  })
+}

@@ -1,4 +1,4 @@
-import {listStageTestInfo,listTestCurrentTest,commitTestAnswer } from '@/api/userStageTest'
+import {listStageTestInfo,listTestCurrentTest,commitTestAnswer,listTestCurrentTestDetail } from '@/api/userStageTest'
 
 // const getDefaultState = () => {
 //   return {
@@ -35,6 +35,16 @@ const actions = {
   commitTestAnswer({}, data) {
     return new Promise((resolve, reject) => {
       commitTestAnswer(data).then(res => {
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  listTestCurrentTestDetail({}, data) {
+    return new Promise((resolve, reject) => {
+      listTestCurrentTestDetail(data).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)

@@ -1,10 +1,5 @@
 <template>
   <div class="app-container">
-    <el-header v-if="this.ifFinish == 1">
-      <div class="filter-container">
-        <h1 align="center">成绩：<span style="color: red">{{this.grade}}</span></h1>
-      </div>
-    </el-header>
     <div class="table-box">
       <el-table
         :data="tableData"
@@ -124,7 +119,6 @@
     /*初始化执行方法*/
     async created() {
       let stageInfo = this.$route.query.stageInfo
-      this.ifFinish = this.$route.query.ifFinish
       console.log('路由携带数据：', stageInfo)
       this.stageInfo = JSON.parse(stageInfo)
       this.username = getUsername()
@@ -429,8 +423,6 @@
         username: '',
         stageInfo: {},
         radio: '',
-        grade: 0,
-        ifFinish: 2
       }
     }
   }
