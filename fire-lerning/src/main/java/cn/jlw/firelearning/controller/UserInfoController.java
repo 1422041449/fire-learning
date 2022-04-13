@@ -49,7 +49,7 @@ public class UserInfoController {
      * 根据token获取当前登录用户信息
      */
     @GetMapping("/getInfo")
-    public LeResponse<UserInfo> getUserInfo(@RequestHeader String token, LeRequest<?> leRequest) {
+    public LeResponse<UserInfo> getUserInfo(@RequestHeader String token) {
         log.info("请求头token值：{}", token);
         return userInfoService.getUserInfo(token);
     }

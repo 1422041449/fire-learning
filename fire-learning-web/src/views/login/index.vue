@@ -216,22 +216,6 @@ export default {
         })
       }
     },
-    // async handleAvatarSuccess(res, file) {
-    //   console.log('通过钩子拿到的头像地址返回：', res)
-    //   if (res.code == 10000) {
-    //     //赋值返回的图片地址
-    //     this.imageUrl = response.data
-    //     this.$message({
-    //       type: 'success',
-    //       message: '上传成功!'
-    //     })
-    //   } else {
-    //     this.$message({
-    //       type: 'error',
-    //       message: '上传失败!'
-    //     })
-    //   }
-    // },
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {

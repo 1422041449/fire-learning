@@ -64,6 +64,19 @@ export const asyncRouterMap = [
    * 用户
    */
   {
+    path: '/personalInfo',
+    component: Layout,
+    children: [
+      {
+        path: 'personalInfo',
+        name: 'personalInfo',
+        component: () => import('@/views/user/personalInfo/PersonalInfo'),
+        meta: { title: '个人信息', icon: 'table', role: ['user'] }
+      },
+    ]
+  },
+
+  {
     path: '/userStageLearn',
     component: Layout,
     children: [
