@@ -168,6 +168,19 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/userStageCondition',
+    component: Layout,
+    children: [
+      {
+        path: 'userStageCondition',
+        name: 'userStageCondition',
+        component: () => import('@/views/admin/userStageCondition/UserStageCondition'),
+        meta: { title: '用户阶段学习考试情况', icon: 'form', role: ['admin'] }
+      },
+    ]
+  },
+
+  {
     path: '/404',
     component: () => import('@/views/errorPage/404'),
     hidden: true

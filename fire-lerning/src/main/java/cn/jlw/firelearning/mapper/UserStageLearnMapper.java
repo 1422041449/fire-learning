@@ -1,6 +1,7 @@
 package cn.jlw.firelearning.mapper;
 
 
+import cn.jlw.firelearning.entity.StageInfo;
 import cn.jlw.firelearning.entity.UserStageLearn;
 import cn.jlw.firelearning.model.vo.ListLearnCurrentTestVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,11 +23,11 @@ import java.util.List;
 public interface UserStageLearnMapper extends BaseMapper<UserStageLearn> {
 
     /**
-     *查询阶段学习题题目信息
+     * 查询阶段学习题题目信息
      */
     @Select("select a.id,a.stage_learn_id,a.user_answer,b.exercises_num,c.exercises_title,c.exercises_type from user_stage_learn a " +
             "join stage_learn b on b.stage_learn_id = a.stage_learn_id join exercises_info c on c.exercises_num = b.exercises_num " +
             "${ew.customSqlSegment}")
-    List<ListLearnCurrentTestVO> listLearnCurrentTest(@Param(Constants.WRAPPER)QueryWrapper<UserStageLearn> queryWrapper);
+    List<ListLearnCurrentTestVO> listLearnCurrentTest(@Param(Constants.WRAPPER) QueryWrapper<UserStageLearn> queryWrapper);
 
 }

@@ -61,7 +61,7 @@ public class UserStageTestServiceImpl extends ServiceImpl<UserStageTestMapper, U
                 }
                 ifFinish = 1;
                 //单选+3分
-                if (userLearnTestAnswerModel.getExercisesType() == 1) {
+                if (userLearnTestAnswerModel.getExercisesType() == 1 && userLearnTestAnswerModel.getAnswerResult() == 1) {
                     grade += 3;
                 }//多选全对+4分
                 else if (userLearnTestAnswerModel.getExercisesType() == 2 && userLearnTestAnswerModel.getAnswerResult() == 1) {

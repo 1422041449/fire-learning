@@ -5,7 +5,9 @@ import cn.jlw.firelearning.entity.StageInfo;
 import cn.jlw.firelearning.model.dto.StageInfoAddDTO;
 import cn.jlw.firelearning.model.dto.StageInfoEditDTO;
 import cn.jlw.firelearning.model.dto.StageInfoListDTO;
+import cn.jlw.firelearning.model.dto.UserConditionDTO;
 import cn.jlw.firelearning.model.vo.StageInfoListVO;
+import cn.jlw.firelearning.model.vo.UserConditionVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -49,4 +51,9 @@ public interface StageInfoService extends IService<StageInfo> {
      * 校验已发布的阶段，抛出异常
      */
     void checkPublish(Integer stageNum);
+
+    /**
+     * 用户成绩查询
+     */
+    List<UserConditionVO> userCondition(UserConditionDTO content);
 }

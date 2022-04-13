@@ -6,26 +6,28 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.jlw.firelearning.entity.*;
 import cn.jlw.firelearning.exception.LeException;
-import cn.jlw.firelearning.mapper.StageInfoMapper;
-import cn.jlw.firelearning.mapper.StageLearnMapper;
-import cn.jlw.firelearning.mapper.StageTestMapper;
-import cn.jlw.firelearning.mapper.UserInfoMapper;
+import cn.jlw.firelearning.mapper.*;
 import cn.jlw.firelearning.model.dto.StageInfoAddDTO;
 import cn.jlw.firelearning.model.dto.StageInfoEditDTO;
 import cn.jlw.firelearning.model.dto.StageInfoListDTO;
+import cn.jlw.firelearning.model.dto.UserConditionDTO;
 import cn.jlw.firelearning.model.vo.StageInfoListVO;
+import cn.jlw.firelearning.model.vo.UserConditionVO;
 import cn.jlw.firelearning.service.StageInfoService;
 import cn.jlw.firelearning.service.UserStageLearnService;
 import cn.jlw.firelearning.service.UserStageTestService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -43,6 +45,8 @@ public class StageInfoServiceImpl extends ServiceImpl<StageInfoMapper, StageInfo
     private final UserStageLearnService userStageLearnService;
     private final UserStageTestService userStageTestService;
     private final UserInfoMapper userInfoMapper;
+    private final UserStageTestMapper userStageTestMapper;
+    private final UserStageLearnMapper userStageLearnMapper;
 
 
     @Override
@@ -140,4 +144,49 @@ public class StageInfoServiceImpl extends ServiceImpl<StageInfoMapper, StageInfo
             throw new LeException("阶段已发布，不可操作!");
         }
     }
+
+    @Override
+    public List<UserConditionVO> userCondition(UserConditionDTO content) {
+        QueryWrapper<StageInfo> queryWrapper = new QueryWrapper<>();
+        if (StrUtil.isNotBlank(content.getUsername())) {
+            queryWrapper.eq("a.username", content.getUsername());
+        }
+        if (StrUtil.isNotBlank(content.getName())) {
+            queryWrapper.like("f.`name`", content.getName());
+        }
+        if (StrUtil.isNotBlank(content.getRealName())) {
+            queryWrapper.like("f.real_name", content.getRealName());
+        }
+        if (null != content.getStageNum()) {
+            queryWrapper.eq("a.stage_num", content.getStageNum());
+        }
+        List<UserConditionVO> resultList = userStageTestMapper.listUserScore(queryWrapper);
+
+        //填充学习进度
+        for (UserConditionVO userConditionVO : resultList) {
+            //查询用户阶段学习进度
+            Integer finishNum = userStageLearnMapper.selectCount(Wrappers.lambdaQuery(UserStageLearn.class)
+                    .eq(UserStageLearn::getUsername, userConditionVO.getUsername())
+                    .eq(UserStageLearn::getStageNum, userConditionVO.getStageNum())
+                    .isNotNull(UserStageLearn::getUserAnswer));
+            //获取当前阶段所有题目数
+            Integer totalNum = stageLearnMapper.selectCount(Wrappers.lambdaQuery(StageLearn.class)
+                    .eq(StageLearn::getStageNum, userConditionVO.getStageNum()));
+            Integer progress = new BigDecimal(finishNum).divide(new BigDecimal(totalNum), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).intValue();
+            userConditionVO.setProgress(progress);
+        }
+        //对结果最最后两个筛选查询
+        if (null != content.getIfFinishTest() && content.getIfFinishTest() == 1) {
+            resultList = resultList.stream().filter(i -> i.getScore() > 0).collect(Collectors.toList());
+        } else if (null != content.getIfFinishTest() && content.getIfFinishTest() == 2) {
+            resultList = resultList.stream().filter(i -> i.getScore() == 0).collect(Collectors.toList());
+        }
+        if (null != content.getIfFinishLearn() && content.getIfFinishLearn() == 1) {
+            resultList = resultList.stream().filter(i -> i.getProgress() == 100).collect(Collectors.toList());
+        } else if (null != content.getIfFinishLearn() && content.getIfFinishLearn() == 2) {
+            resultList = resultList.stream().filter(i -> i.getProgress() < 100).collect(Collectors.toList());
+        }
+        return resultList;
+    }
+
 }

@@ -6,7 +6,9 @@ import cn.jlw.firelearning.model.LeResponse;
 import cn.jlw.firelearning.model.dto.StageInfoAddDTO;
 import cn.jlw.firelearning.model.dto.StageInfoEditDTO;
 import cn.jlw.firelearning.model.dto.StageInfoListDTO;
+import cn.jlw.firelearning.model.dto.UserConditionDTO;
 import cn.jlw.firelearning.model.vo.StageInfoListVO;
+import cn.jlw.firelearning.model.vo.UserConditionVO;
 import cn.jlw.firelearning.service.StageInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,6 +83,16 @@ public class StageInfoController {
         Integer stageNum = leRequest.getContent();
         stageInfoService.publishStageInfo(stageNum);
         return LeResponse.succ();
+    }
+
+    /**
+     * 用户阶段学习考试情况
+     */
+    @PostMapping("/user/condition")
+    public LeResponse<List<UserConditionVO>> userCondition(@Valid @RequestBody LeRequest<UserConditionDTO> leRequest) {
+        UserConditionDTO content = leRequest.getContent();
+        List<UserConditionVO> resultList = stageInfoService.userCondition(content);
+        return LeResponse.succ(resultList);
     }
 
 }

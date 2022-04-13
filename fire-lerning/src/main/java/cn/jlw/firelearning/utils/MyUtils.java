@@ -82,8 +82,8 @@ public class MyUtils {
      * 测试main方法
      */
     public static void main(String[] args) {
-        String a = "BA";
-        String b = "C";
+        String a = "ABC";
+        String b = "BC";
         int i = containStr(a, b);
         System.out.println(i);
     }
