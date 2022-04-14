@@ -49,7 +49,7 @@
       </el-table>
     </div>
     <el-footer style="margin-top: 30px">
-      <div class="filter-container" align="center" v-if="ifFinish == 2">
+      <div class="filter-container" align="center">
         <el-button type="primary"
                    @click="commitTest(tableData)"
         >交卷

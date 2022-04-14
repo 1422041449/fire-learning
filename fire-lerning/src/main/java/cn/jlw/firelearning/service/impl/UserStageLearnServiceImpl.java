@@ -49,12 +49,16 @@ public class UserStageLearnServiceImpl extends ServiceImpl<UserStageLearnMapper,
         for (StageInfo stageInfo : stageInfoList) {
             ListStageLearnInfoVO result = new ListStageLearnInfoVO();
             BeanUtil.copyProperties(stageInfo, result);
-            //计算当前用户当前阶段进度:不为空的数量除以30(题目数量)
+            //计算当前用户当前阶段进度:不为空的数量除以总数量(题目数量)
             Integer notNullNum = baseMapper.selectCount(Wrappers.lambdaQuery(UserStageLearn.class)
                     .eq(UserStageLearn::getStageNum, stageInfo.getStageNum())
                     .eq(UserStageLearn::getUsername, content.getUsername())
                     .isNotNull(UserStageLearn::getUserAnswer));
-            BigDecimal progress = new BigDecimal(notNullNum).divide(new BigDecimal(30), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+            Integer totalNum = baseMapper.selectCount(Wrappers.lambdaQuery(UserStageLearn.class)
+                    .eq(UserStageLearn::getStageNum, stageInfo.getStageNum())
+                    .eq(UserStageLearn::getUsername, content.getUsername()));
+
+            BigDecimal progress = new BigDecimal(notNullNum).divide(new BigDecimal(totalNum), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
             result.setProgress(progress);
             resultList.add(result);
         }
