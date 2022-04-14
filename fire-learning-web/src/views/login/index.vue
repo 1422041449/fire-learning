@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h1 style="margin-left: 30%;font-size: 100px;margin-top: 50px;" class="title_h1" >消  防  知  识  学  习  系  统</h1>
+    <h1 style="margin-left: 30%;font-size: 60px;margin-top: 50px;" class="title_h1" >消  防  知  识  学  习  系  统</h1>
     <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on"
              label-position="left">
 
@@ -254,7 +254,7 @@ $cursor: #fff;
     width: 85%;
 
     input {
-      background: transparent;
+      background: #5a5e66;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
