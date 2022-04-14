@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <h1 style="margin-left: 30%;font-size: 100px;margin-top: 50px;" class="title_h1" >消  防  知  识  学  习  系  统</h1>
     <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on"
              label-position="left">
 
@@ -42,11 +43,11 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+      <el-button :loading="loading" type="primary" style="width:70%;margin-bottom:30px;margin-left: 15%"
                  @click.native.prevent="handleLogin">登录
       </el-button>
 
-      <el-button :loading="loading" type="info" style="width:100%;margin-bottom:30px;"
+      <el-button :loading="loading" type="info" style="width:70%;margin-bottom:30px;margin-left: 15%"
                  @click.native.prevent="add()">注册
       </el-button>
     </el-form>
@@ -228,6 +229,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .title_h1 {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  }
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
@@ -287,16 +291,25 @@ $light_gray: #eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background: url("../../assets/img/background.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   overflow: hidden;
 
   .login-form {
-    position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    padding: 0;
     overflow: hidden;
+    background: rgba(255,255,255,0.3);
+    border: 1px solid black;
+    opacity: 0.85;
+    filter: alpha(opacity=90);
+    border-radius: 20px;
+    transform: translate(-50%,-50%);
+    position: absolute;
+    left: 50%;
+    top:50%;
   }
 
   .tips {
